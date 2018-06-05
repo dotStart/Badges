@@ -107,4 +107,8 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
+
+  <build>
+    <finalName>Badge</finalName>
+  </build>
 </project>
