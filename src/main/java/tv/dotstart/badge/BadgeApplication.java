@@ -2,6 +2,7 @@ package tv.dotstart.badge;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.lang.NonNull;
 
 /**
@@ -9,6 +10,7 @@ import org.springframework.lang.NonNull;
  *
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
+@EnableCaching
 @SpringBootApplication
 public class BadgeApplication {
 
