@@ -54,7 +54,7 @@ public class Github extends AbstractRestService {
       this.authenticationParameters = "";
     } else {
       this.authenticationParameters =
-          "?clientId=" + URLEncoder.encode(clientId, StandardCharsets.UTF_8) + "?clientSecret="
+          "?client_id=" + URLEncoder.encode(clientId, StandardCharsets.UTF_8) + "&client_secret="
               + URLEncoder.encode(clientSecret, StandardCharsets.UTF_8);
     }
   }
