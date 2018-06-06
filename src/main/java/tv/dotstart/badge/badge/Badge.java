@@ -1,7 +1,9 @@
 package tv.dotstart.badge.badge;
 
 import java.io.Serializable;
+import java.util.Optional;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 /**
  * <p>Represents a renderable badge.</p>
@@ -21,6 +23,52 @@ public class Badge implements Serializable {
     this.title = title;
     this.value = value;
     this.color = color;
+  }
+
+  public static <I> Badge create(
+      @NonNull String title,
+      @NonNull Color mainColor,
+      @NonNull Optional<I> input,
+      @NonNull Mapper<I> mapper,
+      @NonNull String fallbackValue,
+      @NonNull Color fallbackColor) {
+    return input
+        .flatMap((in) -> {
+          try {
+            return Optional.ofNullable(mapper.map(in));
+          } catch (Throwable ex) {
+            throw new RuntimeException("Could not convert input to badge", ex);
+          }
+        })
+        .map((val) -> new Badge(
+            title,
+            val,
+            mainColor
+        ))
+        .orElseGet(() -> new Badge(
+            title,
+            fallbackValue,
+            fallbackColor
+        ));
+  }
+
+  @NonNull
+  public static <I> Badge create(
+      @NonNull String title,
+      @NonNull Color mainColor,
+      @NonNull Optional<I> input,
+      @NonNull Mapper<I> mapper,
+      @NonNull String fallbackValue) {
+    return create(title, mainColor, input, mapper, fallbackValue, Color.FALLBACK);
+  }
+
+  @NonNull
+  public static <I> Badge create(
+      @NonNull String title,
+      @NonNull Optional<I> input,
+      @NonNull Mapper<I> mapper,
+      @NonNull String fallbackValue) {
+    return create(title, Color.DEFAULT, input, mapper, fallbackValue);
   }
 
   @NonNull
@@ -109,9 +157,9 @@ public class Badge implements Serializable {
   }
 
   @FunctionalInterface
-  public interface Factory {
+  public interface Mapper<IN> {
 
-    @NonNull
-    Badge create() throws Exception;
+    @Nullable
+    String map(IN input) throws Throwable;
   }
 }
