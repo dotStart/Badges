@@ -7,12 +7,9 @@
     <meta name="description" content="Dynamic badges for your open-source projects!"/>
     <meta name="keywords" content="open source,badge,badges,github,gitlab"/>
 
-    <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
-    <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function () {
         console.log('Do you want to see my Badge?');
@@ -425,9 +422,9 @@
                   <div class="default text">Select a Color</div>
 
                   <div class="menu">
-                    <div class="item"
-                         th:each="color : ${T(tv.dotstart.badge.badge.Badge.Color).values()}"
-                         th:text="${color.name().toLowerCase()}"></div>
+                    <div class="item" th:each="color : ${T(tv.dotstart.badge.badge.Badge.Color).values()}">
+                      <span th:text="${color.name().toLowerCase()}" th:remove="tag"></span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -444,8 +441,7 @@
           </section>
 
           <div class="ui center aligned grid">
-            <div class="two wide column"
-                 th:each="color : ${T(tv.dotstart.badge.badge.Badge.Color).values()}">
+            <div class="two wide column" th:each="color : ${T(tv.dotstart.badge.badge.Badge.Color).values()}">
               <img th:src="@{/custom/{color}/color/{color}(color=${color.name().toLowerCase()})}"/>
             </div>
           </div>
@@ -463,9 +459,7 @@
         </div>
         <div class="column">
           <p class="license">
-            Proudly provided under the terms of the
-            <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache License, Version
-              2.0</a>
+            Proudly provided under the terms of the <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache License, Version 2.0</a>
           </p>
         </div>
       </div>
