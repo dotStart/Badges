@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import tv.dotstart.badge.service.AbstractRestService;
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 @Service
+@EnableConfigurationProperties(GithubProperties.class)
 public class Github extends AbstractRestService {
 
   /**
