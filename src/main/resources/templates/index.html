@@ -8,22 +8,40 @@
     <meta name="keywords" content="open source,badge,badges,github,gitlab"/>
 
     <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+    <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
     <script type="text/javascript">
-      window.onload = function () {
+      $(document).ready(function () {
         console.log('Do you want to see my Badge?');
 
         var app = new Vue({
           el: '#page-body',
           data: {
             gitlabId: '6712167',
+
             githubUsr: 'dotStart',
+
             githubOrg: 'GitHub',
+
             githubOwner: 'dotStart',
-            githubRepo: 'Beacon'
+            githubRepo: 'Beacon',
+
+            customColor: 'default',
+            customTitle: 'title',
+            customValue: 'value'
+          },
+          methods: {
+            e: function (input) { // ugly shorthand
+              return encodeURI(input);
+            }
           }
-        })
-      }
+        });
+
+        $('.ui.dropdown').dropdown();
+      });
     </script>
 
     <link rel="stylesheet" type="text/css"
@@ -70,8 +88,14 @@
         </div>
       </div>
     </header>
-    <main id="page-body" class="ui vertical segment">
+    <main id="page-body" class="ui vertical segment"
+          th:with="base=${#httpServletRequest.requestURL}">
       <div class="ui container">
+        <noscript>
+          <h2 class="ui header">JavaScript is required</h2>
+          <p>This site makes heavy use of JavaScript and will not operate correctly without it</p>
+        </noscript>
+
         <section class="ui vertical very padded segment">
           <h2 class="ui header">GitLab</h2>
 
@@ -90,8 +114,9 @@
                   <img v-bind:src="'gitlab/project/' + gitlabId + '/activity'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'gitlab/project/' + gitlabId + '/activity' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>gitlab/project/{{ e(gitlabId) }}/activity
+                  </code>
                 </td>
               </tr>
               <tr>
@@ -100,8 +125,9 @@
                   <img v-bind:src="'gitlab/project/' + gitlabId + '/forks'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'gitlab/project/' + gitlabId + '/forks' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>gitlab/project/{{ e(gitlabId) }}/forks
+                  </code>
                 </td>
               </tr>
               <tr>
@@ -110,8 +136,9 @@
                   <img v-bind:src="'gitlab/project/' + gitlabId + '/issues'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'gitlab/project/' + gitlabId + '/issues' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>gitlab/project/{{ e(gitlabId) }}/issues
+                  </code>
                 </td>
               </tr>
               <tr>
@@ -120,8 +147,9 @@
                   <img v-bind:src="'gitlab/project/' + gitlabId + '/stars'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'gitlab/project/' + gitlabId + '/stars' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>gitlab/project/{{ e(gitlabId) }}/stars
+                  </code>
                 </td>
               </tr>
             </tbody>
@@ -142,78 +170,78 @@
               <tr>
                 <td><strong>Company</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/user/' + githubUsr + '/company'"/>
+                  <img v-bind:src="'github/user/' + githubUsr + '/company'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/user/' + githubUsr + '/company' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/company
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Location</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/user/' + githubUsr + '/location'"/>
+                  <img v-bind:src="'github/user/' + githubUsr + '/location'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/user/' + githubUsr + '/location' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/location
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Hireable</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/user/' + githubUsr + '/hireable'"/>
+                  <img v-bind:src="'github/user/' + githubUsr + '/hireable'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/user/' + githubUsr + '/hireable' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/hireable
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Repository Count</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/user/' + githubUsr + '/repositories'"/>
+                  <img v-bind:src="'github/user/' + githubUsr + '/repositories'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/user/' + githubUsr + '/repositories' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/repositories
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Gist Count</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/user/' + githubUsr + '/gists'"/>
+                  <img v-bind:src="'github/user/' + githubUsr + '/gists'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/user/' + githubUsr + '/gists' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/gists
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Follower Count</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/user/' + githubUsr + '/followers'"/>
+                  <img v-bind:src="'github/user/' + githubUsr + '/followers'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/user/' + githubUsr + '/followers' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/followers
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Following Count</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/user/' + githubUsr + '/following'"/>
+                  <img v-bind:src="'github/user/' + githubUsr + '/following'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/user/' + githubUsr + '/following' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/following
+                  </code>
                 </td>
               </tr>
             </tbody>
@@ -234,23 +262,23 @@
               <tr>
                 <td><strong>Location</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/organization/' + githubOrg + '/location'"/>
+                  <img v-bind:src="'github/organization/' + githubOrg + '/location'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/organization/' + githubOrg + '/location' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/organization/{{ e(githubOrg) }}/location
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Repository Count</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/organization/' + githubOrg + '/repositories'"/>
+                  <img v-bind:src="'github/organization/' + githubOrg + '/repositories'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/organization/' + githubOrg + '/repositories' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/organization/{{ e(githubOrg) }}/repositories
+                  </code>
                 </td>
               </tr>
             </tbody>
@@ -277,104 +305,150 @@
               <tr>
                 <td><strong>Activity</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/activity'"/>
+                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/activity'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/repository/' + githubOwner + '/' + githubRepo + '/activity' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/activity
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Fork Count</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/forks'"/>
+                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/forks'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/repository/' + githubOwner + '/' + githubRepo + '/forks' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/forks
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Open Issue Count</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/issues'"/>
+                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/issues'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/repository/' + githubOwner + '/' + githubRepo + '/issues' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/issues
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Language</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/language'"/>
+                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/language'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/repository/' + githubOwner + '/' + githubRepo + '/language' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/language
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>License</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/license'"/>
+                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/license'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/repository/' + githubOwner + '/' + githubRepo + '/license' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/license
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Release</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/release'"/>
+                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/release'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/repository/' + githubOwner + '/' + githubRepo + '/release' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/release
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Stargazer Count</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/stars'"/>
+                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/stars'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/repository/' + githubOwner + '/' + githubRepo + '/stars' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/stars
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Subscriber Count</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/subscribers'"/>
+                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/subscribers'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/repository/' + githubOwner + '/' + githubRepo + '/subscribers' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/subscribers
+                  </code>
                 </td>
               </tr>
               <tr>
                 <td><strong>Watchers Count</strong></td>
                 <td class="collapsing">
-                  <img
-                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/watchers'"/>
+                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/watchers'"/>
                 </td>
                 <td class="collapsing">
-                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
-                    'github/repository/' + githubOwner + '/' + githubRepo + '/watchers' }}</code>
+                  <code>
+                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/watchers
+                  </code>
                 </td>
               </tr>
             </tbody>
           </table>
+        </section>
+        <section class="ui vertical very padded segment">
+          <h2 class="ui header">Custom</h2>
+
+          <div class="ui form">
+            <div class="two fields">
+              <div class="field">
+                <label for="custom-title">Title</label>
+                <input type="text" id="custom-title" v-model.lazy="customTitle"/>
+              </div>
+              <div class="field">
+                <label for="custom-value">Color</label>
+                <input type="text" id="custom-value" v-model.lazy="customValue"/>
+              </div>
+              <div class="field">
+                <label for="custom-color">Color</label>
+                <div class="ui fluid search selection dropdown">
+                  <input type="hidden" id="custom-color" v-model.lazy="customColor"/>
+                  <i class="dropdown icon"></i>
+                  <div class="default text">Select a Color</div>
+
+                  <div class="menu">
+                    <div class="item"
+                         th:each="color : ${T(tv.dotstart.badge.badge.Badge.Color).values()}"
+                         th:text="${color.name().toLowerCase()}"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <section class="ui basic center aligned segment">
+            <img v-bind:src="'custom/' + customColor + '/' + customTitle + '/' + customValue"/>
+            <p>
+              <code>
+                <span th:text="${base}"></span>custom/{{ e(customColor) }}/{{ e(customTitle) }}/{{ e(customValue) }}
+              </code>
+            </p>
+          </section>
+
+          <div class="ui center aligned grid">
+            <div class="two wide column"
+                 th:each="color : ${T(tv.dotstart.badge.badge.Badge.Color).values()}">
+              <img th:src="@{/custom/{color}/color/{color}(color=${color.name().toLowerCase()})}"/>
+            </div>
+          </div>
         </section>
       </div>
     </main>
