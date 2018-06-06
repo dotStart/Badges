@@ -20,6 +20,8 @@ import java.io.FileNotFoundException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.lang.NonNull;
@@ -38,6 +40,8 @@ import tv.dotstart.badge.service.AbstractRestService;
 @EnableConfigurationProperties(GithubProperties.class)
 public class Github extends AbstractRestService {
 
+  private static final Logger logger = LogManager.getFormatterLogger(Github.class);
+
   /**
    * Defines the main URL at which the GitHub API is available.
    */
@@ -53,6 +57,8 @@ public class Github extends AbstractRestService {
     if (clientId == null || clientSecret == null) {
       this.authenticationParameters = "";
     } else {
+      logger.info("Using custom GitHub credentials (clientId: %s)", clientId);
+
       this.authenticationParameters =
           "?client_id=" + URLEncoder.encode(clientId, StandardCharsets.UTF_8) + "&client_secret="
               + URLEncoder.encode(clientSecret, StandardCharsets.UTF_8);
