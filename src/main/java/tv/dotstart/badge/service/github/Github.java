@@ -1,19 +1,16 @@
 package tv.dotstart.badge.service.github;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import tv.dotstart.badge.configuration.integration.GithubProperties;
+import tv.dotstart.badge.service.AbstractRestService;
 
 /**
  * Provides access to Github related data (e.g. organizations, repositories, etc).
@@ -21,7 +18,7 @@ import tv.dotstart.badge.configuration.integration.GithubProperties;
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 @Service
-public class Github {
+public class Github extends AbstractRestService {
 
   /**
    * Defines the main URL at which the GitHub API is available.
@@ -45,33 +42,19 @@ public class Github {
   }
 
   /**
-   * Performs an HTTP get request on an arbitrary endpoint.
-   *
-   * @param endpoint an endpoint (relative to the API base URL).
-   * @param type a response type.
-   * @param urlVariables an array of values with which URL variables will be replaced.
-   * @param <E> a response type.
-   * @return a parsed response.
-   * @throws IOException when the request completes with an invalid response.
-   * @throws FileNotFoundException when the request completes with a "Not Found" error.
+   * {@inheritDoc}
    */
-  @NonNull
-  private <E> E get(@NonNull String endpoint, @NonNull Class<E> type, String... urlVariables)
-      throws IOException {
-    var headers = new LinkedMultiValueMap<String, String>();
+  @Override
+  protected void customizeHeaders(MultiValueMap<String, String> headers) {
     headers.add("Accept", "application/vnd.github.v3+json");
+  }
 
-    var response = this.rest
-        .exchange(BASE_URL + endpoint + this.authenticationParameters, HttpMethod.GET,
-            new HttpEntity<>(headers), type, (Object[]) urlVariables);
-
-    if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-      throw new FileNotFoundException("No such entity: " + endpoint);
-    } else if (response.getStatusCode() != HttpStatus.OK) {
-      throw new IOException("Illegal response code: " + response.getStatusCode());
-    }
-
-    return response.getBody();
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String translateUrl(@NonNull String endpointUrl) {
+    return BASE_URL + endpointUrl + this.authenticationParameters;
   }
 
   /**
@@ -88,8 +71,6 @@ public class Github {
       return Optional.of(this.get("/orgs/{loginName}", GHOrganization.class, loginName));
     } catch (FileNotFoundException ex) {
       return Optional.empty();
-    } catch (IOException ex) {
-      throw new RuntimeException("Cannot fetch organization from GitHub: " + loginName, ex);
     }
   }
 
@@ -111,9 +92,6 @@ public class Github {
               repositoryName));
     } catch (FileNotFoundException ex) {
       return Optional.empty();
-    } catch (IOException ex) {
-      var fullName = ownerName + "/" + repositoryName;
-      throw new RuntimeException("Cannot fetch repository from GitHub: " + fullName, ex);
     }
   }
 
@@ -134,10 +112,6 @@ public class Github {
               repositoryName));
     } catch (FileNotFoundException ex) {
       return Optional.empty();
-    } catch (IOException ex) {
-      var fullName = ownerName + "/" + repositoryName;
-      throw new RuntimeException(
-          "Cannot fetch latest release for repository from GitHub: " + fullName, ex);
     }
   }
 }
