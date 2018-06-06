@@ -1,10 +1,8 @@
 package tv.dotstart.badge.configuration;
 
-import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gitlab.api.GitlabAPI;
-import org.kohsuke.github.GitHub;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,26 +34,6 @@ public class IntegrationConfiguration {
       @NonNull GitlabProperties gitlabProperties) {
     this.githubProperties = githubProperties;
     this.gitlabProperties = gitlabProperties;
-  }
-
-  /**
-   * Provides a Github API client which will either use anonymous authentication or a clientId if
-   * specified.
-   *
-   * @return a Github API client.
-   */
-  @Bean
-  @NonNull
-  public GitHub githubApi() throws IOException {
-    var clientId = this.githubProperties.getClientId();
-    logger.info("Github integration has been enabled");
-    if (clientId == null) {
-      logger.warn("Github integration is using anonymous authentication");
-      logger.warn(
-          "Restrictive rate limits are in effect and may cause badge generation to randomly fail!");
-    }
-
-    return clientId == null ? GitHub.connectAnonymously() : GitHub.connectUsingOAuth(clientId);
   }
 
   /**

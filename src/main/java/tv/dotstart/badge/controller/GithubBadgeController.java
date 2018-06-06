@@ -1,28 +1,29 @@
 package tv.dotstart.badge.controller;
 
-import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.Callable;
-import org.kohsuke.github.GitHub;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tv.dotstart.badge.badge.Badge;
-import tv.dotstart.badge.badge.Badge.Color;
+import tv.dotstart.badge.service.github.Github;
 
 /**
+ * Provides a controller which generates badges related to GitHub projects, users and
+ * organizations.
+ *
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 @Controller
 @RequestMapping("/github")
 public class GithubBadgeController {
 
-  private final GitHub api;
+  private final Github api;
 
-  public GithubBadgeController(@NonNull GitHub api) {
+  public GithubBadgeController(@NonNull Github api) {
     this.api = api;
   }
 
@@ -37,24 +38,15 @@ public class GithubBadgeController {
   @RequestMapping("/organization/{ownerName}/location")
   public Callable<Badge> organizationLocation(
       @NonNull @PathVariable("ownerName") String ownerName) {
-    return () -> {
-      try {
-        var organization = this.api.getOrganization(ownerName);
-        var location = organization.getLocation();
-
-        return new Badge(
-            "location",
-            location == null ? "none" : location,
-            location == null ? Color.FALLBACK : Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "location",
-            "no such organization",
-            Color.FALLBACK
-        );
-      }
-    };
+    return () -> Badge.create(
+        "location",
+        this.api.getOrganization(ownerName),
+        (org) -> {
+          var location = org.getLocation();
+          return location == null ? "none" : location;
+        },
+        "no such organization"
+    );
   }
 
   /**
@@ -68,23 +60,14 @@ public class GithubBadgeController {
   @RequestMapping("/organization/{ownerName}/repositories")
   public Callable<Badge> organizationRepositories(
       @NonNull @PathVariable("ownerName") String ownerName) {
-    return () -> {
-      try {
-        var organization = this.api.getOrganization(ownerName);
-
-        return new Badge(
-            "repositories",
-            Integer.toString(organization.getPublicRepoCount()),
-            Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "repositories",
-            "no such organization",
-            Color.FALLBACK
-        );
-      }
-    };
+    return () -> Badge.create(
+        "repositories",
+        this.api.getOrganization(ownerName),
+        (org) -> {
+          return Integer.toString(org.getPublicRepositories());
+        },
+        "no such organization"
+    );
   }
 
   /**
@@ -99,45 +82,30 @@ public class GithubBadgeController {
   @RequestMapping("/project/{ownerName}/{repositoryName}/activity")
   public Callable<Badge> projectActivity(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
-    return () -> {
-      try {
-        var repository = this.api.getRepository(ownerName + "/" + repositoryName);
-        var lastPush = repository.getPushedAt();
+    return () -> Badge.create(
+        "last activity",
+        this.api.getRepository(ownerName, repositoryName),
+        (repo) -> {
+          var lastPush = repo.getPushedAt();
 
-        if (lastPush == null) {
-          return new Badge(
-              "activity",
-              "none",
-              Color.DEFAULT
-          );
-        }
+          if (lastPush == null) {
+            return "never";
+          }
 
-        var duration = Duration.between(lastPush.toInstant(), Instant.now());
-        String value;
+          var duration = Duration.between(lastPush, Instant.now());
 
-        if (duration.toDaysPart() > 0) { // TODO: Move to utility
-          value = duration.toDaysPart() + " days ago";
-        } else if (duration.toHoursPart() > 0) {
-          value = duration.toHoursPart() + " hours ago";
-        } else if (duration.toMinutesPart() > 0) {
-          value = duration.toMinutesPart() + " minutes ago";
-        } else {
-          value = "just now";
-        }
-
-        return new Badge(
-            "activity",
-            value,
-            Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "forks",
-            "no such project",
-            Color.FALLBACK
-        );
-      }
-    };
+          if (duration.toDaysPart() > 0) { // TODO: Move to utility
+            return duration.toDaysPart() + " days ago";
+          } else if (duration.toHoursPart() > 0) {
+            return duration.toHoursPart() + " hours ago";
+          } else if (duration.toMinutesPart() > 0) {
+            return duration.toMinutesPart() + " minutes ago";
+          } else {
+            return "just now";
+          }
+        },
+        "no such repository"
+    );
   }
 
   /**
@@ -152,23 +120,12 @@ public class GithubBadgeController {
   @RequestMapping("/project/{ownerName}/{repositoryName}/forks")
   public Callable<Badge> projectForks(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
-    return () -> {
-      try {
-        var repository = this.api.getRepository(ownerName + "/" + repositoryName);
-
-        return new Badge(
-            "forks",
-            Integer.toString(repository.getForks()),
-            Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "forks",
-            "no such project",
-            Color.FALLBACK
-        );
-      }
-    };
+    return () -> Badge.create(
+        "forks",
+        this.api.getRepository(ownerName, repositoryName),
+        (repo) -> Integer.toString(repo.getForks()),
+        "no such repository"
+    );
   }
 
   /**
@@ -183,23 +140,12 @@ public class GithubBadgeController {
   @RequestMapping("/project/{ownerName}/{repositoryName}/issues")
   public Callable<Badge> projectIssues(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
-    return () -> {
-      try {
-        var repository = this.api.getRepository(ownerName + "/" + repositoryName);
-
-        return new Badge(
-            "issues",
-            Integer.toString(repository.getOpenIssueCount()),
-            Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "issues",
-            "no such project",
-            Color.FALLBACK
-        );
-      }
-    };
+    return () -> Badge.create(
+        "issues",
+        this.api.getRepository(ownerName, repositoryName),
+        (repo) -> Integer.toString(repo.getOpenIssues()),
+        "no such repository"
+    );
   }
 
   /**
@@ -214,24 +160,20 @@ public class GithubBadgeController {
   @RequestMapping("/project/{ownerName}/{repositoryName}/language")
   public Callable<Badge> projectLanguage(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
-    return () -> {
-      try {
-        var repository = this.api.getRepository(ownerName + "/" + repositoryName);
-        var language = repository.getLanguage();
+    return () -> Badge.create(
+        "language",
+        this.api.getRepository(ownerName, repositoryName),
+        (repo) -> {
+          var language = repo.getLanguage();
 
-        return new Badge(
-            "language",
-            language == null ? "none" : language.toLowerCase(),
-            language == null ? Color.FALLBACK : Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "issues",
-            "no such project",
-            Color.FALLBACK
-        );
-      }
-    };
+          if (language == null) {
+            return "unknown";
+          }
+
+          return language.toLowerCase();
+        },
+        "no such repository"
+    );
   }
 
   /**
@@ -246,25 +188,20 @@ public class GithubBadgeController {
   @RequestMapping("/project/{ownerName}/{repositoryName}/license")
   public Callable<Badge> projectLicense(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
-    return () -> {
-      try {
-        var repository = this.api.getRepository(ownerName + "/" + repositoryName);
-        @SuppressWarnings("deprecation") // preview API
-            var license = repository.getLicense();
+    return () -> Badge.create(
+        "license",
+        this.api.getRepository(ownerName, repositoryName),
+        (repo) -> {
+          var license = repo.getLicense();
 
-        return new Badge(
-            "license",
-            license == null ? "none" : license.getName().toLowerCase(),
-            license == null ? Color.FALLBACK : Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "license",
-            "no such project",
-            Color.FALLBACK
-        );
-      }
-    };
+          if (license == null) {
+            return "unknown";
+          }
+
+          return license.getName().toLowerCase();
+        },
+        "no such repository"
+    );
   }
 
   /**
@@ -279,24 +216,18 @@ public class GithubBadgeController {
   @RequestMapping("/project/{ownerName}/{repositoryName}/release")
   public Callable<Badge> projectRelease(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
-    return () -> {
-      try {
-        var repository = this.api.getRepository(ownerName + "/" + repositoryName);
-        var release = repository.getLatestRelease();
+    return () -> Badge.create(
+        "latest release",
+        this.api.getLatestRelease(ownerName, repositoryName),
+        (release) -> {
+          if (release == null) {
+            return "none";
+          }
 
-        return new Badge(
-            "release",
-            release == null ? "none" : release.getTagName().toLowerCase(),
-            release == null ? Color.FALLBACK : Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "license",
-            "no such project",
-            Color.FALLBACK
-        );
-      }
-    };
+          return release.getTagName().toLowerCase();
+        },
+        "no such repository"
+    );
   }
 
   /**
@@ -311,23 +242,12 @@ public class GithubBadgeController {
   @RequestMapping("/project/{ownerName}/{repositoryName}/stars")
   public Callable<Badge> projectStars(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
-    return () -> {
-      try {
-        var repository = this.api.getRepository(ownerName + "/" + repositoryName);
-
-        return new Badge(
-            "stars",
-            Integer.toString(repository.getStargazersCount()),
-            Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "stars",
-            "no such project",
-            Color.FALLBACK
-        );
-      }
-    };
+    return () -> Badge.create(
+        "stars",
+        this.api.getRepository(ownerName, repositoryName),
+        (repo) -> Integer.toString(repo.getStargazers()),
+        "no such repository"
+    );
   }
 
   /**
@@ -342,23 +262,12 @@ public class GithubBadgeController {
   @RequestMapping("/project/{ownerName}/{repositoryName}/subscribers")
   public Callable<Badge> projectSubscribers(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
-    return () -> {
-      try {
-        var repository = this.api.getRepository(ownerName + "/" + repositoryName);
-
-        return new Badge(
-            "subscribers",
-            Integer.toString(repository.getSubscribersCount()),
-            Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "subscribers",
-            "no such project",
-            Color.FALLBACK
-        );
-      }
-    };
+    return () -> Badge.create(
+        "subscribers",
+        this.api.getRepository(ownerName, repositoryName),
+        (repo) -> Integer.toString(repo.getSubscriberCount()),
+        "no such repository"
+    );
   }
 
   /**
@@ -373,22 +282,11 @@ public class GithubBadgeController {
   @RequestMapping("/project/{ownerName}/{repositoryName}/watchers")
   public Callable<Badge> projectWatchers(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
-    return () -> {
-      try {
-        var repository = this.api.getRepository(ownerName + "/" + repositoryName);
-
-        return new Badge(
-            "watchers",
-            Integer.toString(repository.getWatchers()),
-            Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "watchers",
-            "no such project",
-            Color.FALLBACK
-        );
-      }
-    };
+    return () -> Badge.create(
+        "watchers",
+        this.api.getRepository(ownerName, repositoryName),
+        (repo) -> Integer.toString(repo.getWatchers()),
+        "no such repository"
+    );
   }
 }

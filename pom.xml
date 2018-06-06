@@ -78,11 +78,6 @@
 
     <!-- Integration Clients -->
     <dependency>
-      <groupId>org.kohsuke</groupId>
-      <artifactId>github-api</artifactId>
-      <version>1.93</version>
-    </dependency>
-    <dependency>
       <groupId>org.gitlab</groupId>
       <artifactId>java-gitlab-api</artifactId>
       <version>4.0.0</version>
