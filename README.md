@@ -1,6 +1,6 @@
 ![Apache License, Version 2.0](https://badges.dotstart.tv/github/repository/dotStart/Badges/license)
-![Last Activity](http://localhost:8080/github/repository/dotStart/Beacon/activity)
-![Latest Release](http://localhost:8080/github/repository/dotStart/Beacon/release)
+![Last Activity](https://badges.dotstart.tv/github/repository/dotStart/Badges/activity)
+![Latest Release](https://badges.dotstart.tv/github/repository/dotStart/Badges/release)
 
 Project/User/Organization Badges
 --------------------------------
