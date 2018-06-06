@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tv.dotstart.badge.badge.Badge;
+import tv.dotstart.badge.badge.Badge.Color;
 import tv.dotstart.badge.service.github.Github;
 
 /**
@@ -41,6 +42,145 @@ public class GithubBadgeController {
 
   public GithubBadgeController(@NonNull Github api) {
     this.api = api;
+  }
+
+  /**
+   * Creates a badge which displays the company which currently employs a given user.
+   *
+   * @param loginName a login name.
+   * @return a badge.
+   */
+  @NonNull
+  @ModelAttribute("badge")
+  @RequestMapping("/user/{loginName}/company")
+  public Callable<Badge> userCompany(@NonNull @PathVariable("loginName") String loginName) {
+    return () -> Badge.create(
+        "company",
+        this.api.getUser(loginName),
+        (usr) -> {
+          var company = usr.getCompany();
+
+          if (company != null && company.charAt(0) == '@') {
+            company = company.substring(1);
+          }
+
+          return company == null ? "none" : company;
+        },
+        "no such user"
+    );
+  }
+
+  /**
+   * Creates a badge which displays the current location of a given user.
+   *
+   * @param loginName a login name.
+   * @return a badge.
+   */
+  @NonNull
+  @ModelAttribute("badge")
+  @RequestMapping("/user/{loginName}/location")
+  public Callable<Badge> userLocation(@NonNull @PathVariable("loginName") String loginName) {
+    return () -> Badge.create(
+        "location",
+        this.api.getUser(loginName),
+        (usr) -> {
+          var location = usr.getLocation();
+          return location == null ? "none" : location;
+        },
+        "no such user"
+    );
+  }
+
+  /**
+   * Creates a badge which indicates whether or not a given user is currently available for hire.
+   *
+   * @param loginName a login name.
+   * @return a badge.
+   */
+  @NonNull
+  @ModelAttribute("badge")
+  @RequestMapping("/user/{loginName}/hireable")
+  public Callable<Badge> userHireable(@NonNull @PathVariable("loginName") String loginName) {
+    return () -> Badge.create(
+        "available for hire",
+        this.api.getUser(loginName),
+        (usr) -> usr.isHireable() ? "yes" : "no",
+        (usr) -> usr.isHireable() ? Color.SUCCESS : Color.FAILURE,
+        "no such user",
+        Color.FALLBACK
+    );
+  }
+
+  /**
+   * Creates a badge which displays the total number of public repositories a user currently has.
+   *
+   * @param loginName a login name.
+   * @return a badge.
+   */
+  @NonNull
+  @ModelAttribute("badge")
+  @RequestMapping("/user/{loginName}/repositories")
+  public Callable<Badge> userRepositories(@NonNull @PathVariable("loginName") String loginName) {
+    return () -> Badge.create(
+        "repositories",
+        this.api.getUser(loginName),
+        (usr) -> Integer.toString(usr.getPublicRepositories()),
+        "no such user"
+    );
+  }
+
+  /**
+   * Creates a badge which displays the total number of public gists a user currently has.
+   *
+   * @param loginName a login name.
+   * @return a badge.
+   */
+  @NonNull
+  @ModelAttribute("badge")
+  @RequestMapping("/user/{loginName}/gists")
+  public Callable<Badge> userGists(@NonNull @PathVariable("loginName") String loginName) {
+    return () -> Badge.create(
+        "gists",
+        this.api.getUser(loginName),
+        (usr) -> Integer.toString(usr.getPublicGists()),
+        "no such user"
+    );
+  }
+
+  /**
+   * Creates a badge which displays the total number of followers a user currently has.
+   *
+   * @param loginName a login name.
+   * @return a badge.
+   */
+  @NonNull
+  @ModelAttribute("badge")
+  @RequestMapping("/user/{loginName}/followers")
+  public Callable<Badge> userFollowers(@NonNull @PathVariable("loginName") String loginName) {
+    return () -> Badge.create(
+        "followers",
+        this.api.getUser(loginName),
+        (usr) -> Integer.toString(usr.getFollowers()),
+        "no such user"
+    );
+  }
+
+  /**
+   * Creates a badge which displays the total number a user currently follows.
+   *
+   * @param loginName a login name.
+   * @return a badge.
+   */
+  @NonNull
+  @ModelAttribute("badge")
+  @RequestMapping("/user/{loginName}/following")
+  public Callable<Badge> userFollowing(@NonNull @PathVariable("loginName") String loginName) {
+    return () -> Badge.create(
+        "following",
+        this.api.getUser(loginName),
+        (usr) -> Integer.toString(usr.getFollowing()),
+        "no such user"
+    );
   }
 
   /**

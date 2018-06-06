@@ -17,6 +17,7 @@
 package tv.dotstart.badge.badge;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -43,24 +44,34 @@ public class Badge implements Serializable {
 
   public static <I> Badge create(
       @NonNull String title,
-      @NonNull Color mainColor,
       @NonNull Optional<I> input,
-      @NonNull Mapper<I> mapper,
+      @NonNull Mapper<I, String> valueMapper,
+      @NonNull Mapper<I, Color> colorMapper,
       @NonNull String fallbackValue,
       @NonNull Color fallbackColor) {
     return input
         .flatMap((in) -> {
           try {
-            return Optional.ofNullable(mapper.map(in));
+            return Optional.ofNullable(valueMapper.map(in))
+                .map((val) -> Map.entry(in, val));
           } catch (Throwable ex) {
             throw new RuntimeException("Could not convert input to badge", ex);
           }
         })
-        .map((val) -> new Badge(
-            title,
-            val,
-            mainColor
-        ))
+        .map((val) -> {
+          Color color;
+          try {
+            color = colorMapper.map(val.getKey());
+          } catch (Throwable ex) {
+            throw new RuntimeException("Could not convert input to badge", ex);
+          }
+
+          return new Badge(
+              title,
+              val.getValue(),
+              color
+          );
+        })
         .orElseGet(() -> new Badge(
             title,
             fallbackValue,
@@ -73,7 +84,18 @@ public class Badge implements Serializable {
       @NonNull String title,
       @NonNull Color mainColor,
       @NonNull Optional<I> input,
-      @NonNull Mapper<I> mapper,
+      @NonNull Mapper<I, String> mapper,
+      @NonNull String fallbackValue,
+      @NonNull Color fallbackColor) {
+    return create(title, input, mapper, (in) -> mainColor, fallbackValue, fallbackColor);
+  }
+
+  @NonNull
+  public static <I> Badge create(
+      @NonNull String title,
+      @NonNull Color mainColor,
+      @NonNull Optional<I> input,
+      @NonNull Mapper<I, String> mapper,
       @NonNull String fallbackValue) {
     return create(title, mainColor, input, mapper, fallbackValue, Color.FALLBACK);
   }
@@ -82,7 +104,7 @@ public class Badge implements Serializable {
   public static <I> Badge create(
       @NonNull String title,
       @NonNull Optional<I> input,
-      @NonNull Mapper<I> mapper,
+      @NonNull Mapper<I, String> mapper,
       @NonNull String fallbackValue) {
     return create(title, Color.DEFAULT, input, mapper, fallbackValue);
   }
@@ -173,9 +195,9 @@ public class Badge implements Serializable {
   }
 
   @FunctionalInterface
-  public interface Mapper<IN> {
+  public interface Mapper<IN, OUT> {
 
     @Nullable
-    String map(IN input) throws Throwable;
+    OUT map(IN input) throws Throwable;
   }
 }

@@ -17,6 +17,7 @@
           el: '#page-body',
           data: {
             gitlabId: '6712167',
+            githubUsr: 'dotStart',
             githubOrg: 'GitHub',
             githubOwner: 'dotStart',
             githubRepo: 'Beacon'
@@ -77,7 +78,7 @@
           <div class="ui form">
             <div class="field">
               <label for="gitlab-projectId">Project ID</label>
-              <input type="text" id="gitlab-projectId" v-model="gitlabId"/>
+              <input type="text" id="gitlab-projectId" v-model.lazy="gitlabId"/>
             </div>
           </div>
 
@@ -127,12 +128,104 @@
           </table>
         </section>
         <section class="ui vertical very padded segment">
+          <h2 class="ui header">GitHub (Users)</h2>
+
+          <div class="ui form">
+            <div class="field">
+              <label for="github-usrName">Users</label>
+              <input type="text" id="github-usrName" v-model.lazy="githubUsr"/>
+            </div>
+          </div>
+
+          <table class="ui very basic table">
+            <tbody>
+              <tr>
+                <td><strong>Company</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/user/' + githubUsr + '/company'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/user/' + githubUsr + '/company' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Location</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/user/' + githubUsr + '/location'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/user/' + githubUsr + '/location' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Hireable</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/user/' + githubUsr + '/hireable'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/user/' + githubUsr + '/hireable' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Repository Count</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/user/' + githubUsr + '/repositories'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/user/' + githubUsr + '/repositories' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Gist Count</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/user/' + githubUsr + '/gists'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/user/' + githubUsr + '/gists' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Follower Count</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/user/' + githubUsr + '/followers'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/user/' + githubUsr + '/followers' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Following Count</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/user/' + githubUsr + '/following'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/user/' + githubUsr + '/following' }}</code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <section class="ui vertical very padded segment">
           <h2 class="ui header">GitHub (Organizations)</h2>
 
           <div class="ui form">
             <div class="field">
               <label for="github-orgName">Organization Name</label>
-              <input type="text" id="github-orgName" v-model="githubOrg"/>
+              <input type="text" id="github-orgName" v-model.lazy="githubOrg"/>
             </div>
           </div>
 
@@ -170,11 +263,11 @@
             <div class="two fields">
               <div class="field">
                 <label for="github-ownerName">Organization/User Login</label>
-                <input type="text" id="github-ownerName" v-model="githubOwner"/>
+                <input type="text" id="github-ownerName" v-model.lazy="githubOwner"/>
               </div>
               <div class="field">
                 <label for="github-repositoryName">Repository Name</label>
-                <input type="text" id="github-repositoryName" v-model="githubRepo"/>
+                <input type="text" id="github-repositoryName" v-model.lazy="githubRepo"/>
               </div>
             </div>
           </div>

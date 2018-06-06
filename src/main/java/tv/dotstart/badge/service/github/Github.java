@@ -138,4 +138,20 @@ public class Github extends AbstractRestService {
       return Optional.empty();
     }
   }
+
+  /**
+   * Retrieves the user profile for a given login name.
+   *
+   * @param loginName a login name.
+   * @return a user profile.
+   */
+  @NonNull
+  @Cacheable(cacheNames = "github-user", key = "#loginName")
+  public Optional<GHUser> getUser(@NonNull String loginName) {
+    try {
+      return Optional.of(this.get("/users/{loginName}", GHUser.class, loginName));
+    } catch (FileNotFoundException ex) {
+      return Optional.empty();
+    }
+  }
 }
