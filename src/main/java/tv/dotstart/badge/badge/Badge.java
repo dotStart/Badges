@@ -1,5 +1,6 @@
 package tv.dotstart.badge.badge;
 
+import java.io.Serializable;
 import org.springframework.lang.NonNull;
 
 /**
@@ -10,7 +11,7 @@ import org.springframework.lang.NonNull;
  *
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
-public class Badge {
+public class Badge implements Serializable {
 
   private final String title;
   private final String value;
