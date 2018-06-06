@@ -95,7 +95,7 @@ public class GithubBadgeController {
    */
   @NonNull
   @ModelAttribute("badge")
-  @RequestMapping("/project/{ownerName}/{repositoryName}/activity")
+  @RequestMapping("/repository/{ownerName}/{repositoryName}/activity")
   public Callable<Badge> projectActivity(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
     return () -> Badge.create(
@@ -133,7 +133,7 @@ public class GithubBadgeController {
    */
   @NonNull
   @ModelAttribute("badge")
-  @RequestMapping("/project/{ownerName}/{repositoryName}/forks")
+  @RequestMapping("/repository/{ownerName}/{repositoryName}/forks")
   public Callable<Badge> projectForks(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
     return () -> Badge.create(
@@ -153,7 +153,7 @@ public class GithubBadgeController {
    */
   @NonNull
   @ModelAttribute("badge")
-  @RequestMapping("/project/{ownerName}/{repositoryName}/issues")
+  @RequestMapping("/repository/{ownerName}/{repositoryName}/issues")
   public Callable<Badge> projectIssues(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
     return () -> Badge.create(
@@ -173,7 +173,7 @@ public class GithubBadgeController {
    */
   @NonNull
   @ModelAttribute("badge")
-  @RequestMapping("/project/{ownerName}/{repositoryName}/language")
+  @RequestMapping("/repository/{ownerName}/{repositoryName}/language")
   public Callable<Badge> projectLanguage(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
     return () -> Badge.create(
@@ -201,7 +201,7 @@ public class GithubBadgeController {
    */
   @NonNull
   @ModelAttribute("badge")
-  @RequestMapping("/project/{ownerName}/{repositoryName}/license")
+  @RequestMapping("/repository/{ownerName}/{repositoryName}/license")
   public Callable<Badge> projectLicense(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
     return () -> Badge.create(
@@ -229,7 +229,7 @@ public class GithubBadgeController {
    */
   @NonNull
   @ModelAttribute("badge")
-  @RequestMapping("/project/{ownerName}/{repositoryName}/release")
+  @RequestMapping("/repository/{ownerName}/{repositoryName}/release")
   public Callable<Badge> projectRelease(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
     return () -> Badge.create(
@@ -255,7 +255,7 @@ public class GithubBadgeController {
    */
   @NonNull
   @ModelAttribute("badge")
-  @RequestMapping("/project/{ownerName}/{repositoryName}/stars")
+  @RequestMapping("/repository/{ownerName}/{repositoryName}/stars")
   public Callable<Badge> projectStars(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
     return () -> Badge.create(
@@ -275,7 +275,7 @@ public class GithubBadgeController {
    */
   @NonNull
   @ModelAttribute("badge")
-  @RequestMapping("/project/{ownerName}/{repositoryName}/subscribers")
+  @RequestMapping("/repository/{ownerName}/{repositoryName}/subscribers")
   public Callable<Badge> projectSubscribers(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
     return () -> Badge.create(
@@ -295,7 +295,7 @@ public class GithubBadgeController {
    */
   @NonNull
   @ModelAttribute("badge")
-  @RequestMapping("/project/{ownerName}/{repositoryName}/watchers")
+  @RequestMapping("/repository/{ownerName}/{repositoryName}/watchers")
   public Callable<Badge> projectWatchers(@NonNull @PathVariable("ownerName") String ownerName,
       @NonNull @PathVariable("repositoryName") String repositoryName) {
     return () -> Badge.create(
