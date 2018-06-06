@@ -5,7 +5,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.gitlab.api.GitlabAPI;
 import org.kohsuke.github.GitHub;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -67,7 +66,6 @@ public class IntegrationConfiguration {
    */
   @Bean
   @NonNull
-  @ConditionalOnProperty("badge.integration.gitlab.baseUrl")
   public GitlabAPI gitlabApi() {
     logger.info("Gitlab integration has been enabled (using token of type %s)",
         this.gitlabProperties.getTokenType());

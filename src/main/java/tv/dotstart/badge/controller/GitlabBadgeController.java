@@ -5,7 +5,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.Callable;
 import org.gitlab.api.GitlabAPI;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,7 +20,6 @@ import tv.dotstart.badge.badge.Badge.Color;
  */
 @Controller
 @RequestMapping("/gitlab")
-@ConditionalOnBean(GitlabAPI.class)
 public class GitlabBadgeController {
 
   private final GitlabAPI api;

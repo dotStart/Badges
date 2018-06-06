@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("badge.integration.gitlab")
 public class GitlabProperties {
 
-  private String baseUrl;
+  private String baseUrl = "https://gitlab.com";
   private String token;
   private TokenType tokenType = TokenType.PRIVATE_TOKEN;
 
