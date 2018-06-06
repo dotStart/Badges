@@ -76,13 +76,6 @@
       </exclusions>
     </dependency>
 
-    <!-- Integration Clients -->
-    <dependency>
-      <groupId>org.gitlab</groupId>
-      <artifactId>java-gitlab-api</artifactId>
-      <version>4.0.0</version>
-    </dependency>
-
     <!-- Testing -->
     <dependency>
       <groupId>org.springframework.boot</groupId>

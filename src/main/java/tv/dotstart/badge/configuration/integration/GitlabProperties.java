@@ -1,6 +1,5 @@
 package tv.dotstart.badge.configuration.integration;
 
-import org.gitlab.api.TokenType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -37,5 +36,13 @@ public class GitlabProperties {
 
   public void setTokenType(TokenType tokenType) {
     this.tokenType = tokenType;
+  }
+
+  /**
+   * Provides a list of valid Gitlab token types.
+   */
+  public enum TokenType {
+    OAUTH_TOKEN,
+    PRIVATE_TOKEN
   }
 }

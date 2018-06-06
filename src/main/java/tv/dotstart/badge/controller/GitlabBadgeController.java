@@ -1,17 +1,15 @@
 package tv.dotstart.badge.controller;
 
-import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.Callable;
-import org.gitlab.api.GitlabAPI;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tv.dotstart.badge.badge.Badge;
-import tv.dotstart.badge.badge.Badge.Color;
+import tv.dotstart.badge.service.gitlab.Gitlab;
 
 /**
  * Provides badges which provide basic information about the status of a GitLab project.
@@ -22,9 +20,9 @@ import tv.dotstart.badge.badge.Badge.Color;
 @RequestMapping("/gitlab")
 public class GitlabBadgeController {
 
-  private final GitlabAPI api;
+  private final Gitlab api;
 
-  public GitlabBadgeController(@NonNull GitlabAPI api) {
+  public GitlabBadgeController(@NonNull Gitlab api) {
     this.api = api;
   }
 
@@ -39,36 +37,30 @@ public class GitlabBadgeController {
   @ModelAttribute("badge")
   @RequestMapping("/project/{projectId}/activity")
   public Callable<Badge> activity(@NonNull @PathVariable("projectId") String projectId) {
-    return () -> {
-      try {
-        var project = this.api.getProject(projectId);
+    return () -> Badge.create(
+        "last activity",
+        this.api.getProject(projectId),
+        (proj) -> {
+          var lastActivity = proj.getLastActivityAt();
 
-        var duration = Duration.between(project.getLastActivityAt().toInstant(), Instant.now());
-        String value;
+          if (lastActivity == null) {
+            return "unknown";
+          }
 
-        if (duration.toDaysPart() > 0) {
-          value = duration.toDaysPart() + " days ago";
-        } else if (duration.toHoursPart() > 0) {
-          value = duration.toHoursPart() + " hours ago";
-        } else if (duration.toMinutesPart() > 0) {
-          value = duration.toMinutesPart() + " minutes ago";
-        } else {
-          value = "just now";
-        }
+          var duration = Duration.between(lastActivity, Instant.now());
 
-        return new Badge(
-            "last activity",
-            value,
-            Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "stars",
-            "no such project",
-            Color.FALLBACK
-        );
-      }
-    };
+          if (duration.toDaysPart() > 0) {
+            return duration.toDaysPart() + " days ago";
+          } else if (duration.toHoursPart() > 0) {
+            return duration.toHoursPart() + " hours ago";
+          } else if (duration.toMinutesPart() > 0) {
+            return duration.toMinutesPart() + " minutes ago";
+          } else {
+            return "just now";
+          }
+        },
+        "no such project"
+    );
   }
 
   /**
@@ -81,23 +73,30 @@ public class GitlabBadgeController {
   @ModelAttribute("badge")
   @RequestMapping("/project/{projectId}/forks")
   public Callable<Badge> forks(@NonNull @PathVariable("projectId") String projectId) {
-    return () -> {
-      try {
-        var project = this.api.getProject(projectId);
+    return () -> Badge.create(
+        "forks",
+        this.api.getProject(projectId),
+        (proj) -> Integer.toString(proj.getForks()),
+        "no such project"
+    );
+  }
 
-        return new Badge(
-            "forks",
-            project.getForksCount().toString(),
-            Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "forks",
-            "no such project",
-            Color.FALLBACK
-        );
-      }
-    };
+  /**
+   * Creates a badge which displays the total amount of open issues in a given Gitlab project.
+   *
+   * @param projectId a project identifier.
+   * @return a badge callable.
+   */
+  @NonNull
+  @ModelAttribute("badge")
+  @RequestMapping("/project/{projectId}/issues")
+  public Callable<Badge> issues(@NonNull @PathVariable("projectId") String projectId) {
+    return () -> Badge.create(
+        "issues",
+        this.api.getProject(projectId),
+        (proj) -> Integer.toString(proj.getOpenIssues()),
+        "no such project"
+    );
   }
 
   /**
@@ -110,22 +109,11 @@ public class GitlabBadgeController {
   @ModelAttribute("badge")
   @RequestMapping("/project/{projectId}/stars")
   public Callable<Badge> stars(@NonNull @PathVariable("projectId") String projectId) {
-    return () -> {
-      try {
-        var project = this.api.getProject(projectId);
-
-        return new Badge(
-            "stars",
-            project.getStarCount().toString(),
-            Color.DEFAULT
-        );
-      } catch (FileNotFoundException ex) {
-        return new Badge(
-            "stars",
-            "no such project",
-            Color.FALLBACK
-        );
-      }
-    };
+    return () -> Badge.create(
+        "stars",
+        this.api.getProject(projectId),
+        (proj) -> Integer.toString(proj.getStars()),
+        "no such project"
+    );
   }
 }
