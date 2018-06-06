@@ -25,6 +25,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.WebContentInterceptor;
 
 /**
+ * Configures the Spring Web components to improve caching and serve static templates to the user
+ * where required.
+ *
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
 @Configuration
