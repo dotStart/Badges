@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8"/>
+
+    <title>Badges</title>
+    <meta name="description" content="Dynamic badges for your open-source projects!"/>
+    <meta name="keywords" content="open source,badge,badges,github,gitlab"/>
+
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
+    <script type="text/javascript">
+      window.onload = function () {
+        console.log('Do you want to see my Badge?');
+
+        var app = new Vue({
+          el: '#page-body',
+          data: {
+            gitlabId: '6712167',
+            githubOrg: 'GitHub',
+            githubOwner: 'dotStart',
+            githubRepo: 'Beacon'
+          }
+        })
+      }
+    </script>
+
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css"/>
+    <style type="text/css">
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+
+      #page-body {
+        flex-grow: 1;
+      }
+
+      .license,
+      .license a {
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .license a {
+        transition: color 250ms ease;
+      }
+
+      .license a:hover {
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <header id="page-header" class="ui inverted orange segment">
+      <div class="ui container">
+        <div class="ui large inverted secondary menu">
+          <a th:href="@{/}" class="item">
+            <i class="dashboard icon"></i>
+            Badge List
+          </a>
+
+          <div class="right menu">
+            <a href="https://github.com/dotStart/Badges" class="item">
+              <i class="github icon"></i>
+              GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main id="page-body">
+      <div class="ui container">
+        <section class="ui vertical very padded segment">
+          <h2 class="ui header">GitLab</h2>
+
+          <div class="ui form">
+            <div class="field">
+              <label for="gitlab-projectId">Project ID</label>
+              <input type="text" id="gitlab-projectId" v-model="gitlabId"/>
+            </div>
+          </div>
+
+          <table class="ui very basic table">
+            <tbody>
+              <tr>
+                <td><strong>Activity</strong></td>
+                <td class="collapsing">
+                  <img v-bind:src="'gitlab/project/' + gitlabId + '/activity'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'gitlab/project/' + gitlabId + '/activity' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Fork Count</strong></td>
+                <td class="collapsing">
+                  <img v-bind:src="'gitlab/project/' + gitlabId + '/forks'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'gitlab/project/' + gitlabId + '/forks' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Open Issue Count</strong></td>
+                <td class="collapsing">
+                  <img v-bind:src="'gitlab/project/' + gitlabId + '/issues'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'gitlab/project/' + gitlabId + '/issues' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Stargazer Count</strong></td>
+                <td class="collapsing">
+                  <img v-bind:src="'gitlab/project/' + gitlabId + '/stars'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'gitlab/project/' + gitlabId + '/stars' }}</code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <section class="ui vertical very padded segment">
+          <h2 class="ui header">GitHub (Organizations)</h2>
+
+          <div class="ui form">
+            <div class="field">
+              <label for="github-orgName">Organization Name</label>
+              <input type="text" id="github-orgName" v-model="githubOrg"/>
+            </div>
+          </div>
+
+          <table class="ui very basic table">
+            <tbody>
+              <tr>
+                <td><strong>Location</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/organization/' + githubOrg + '/location'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/organization/' + githubOrg + '/location' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Repository Count</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/organization/' + githubOrg + '/repositories'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/organization/' + githubOrg + '/repositories' }}</code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <section class="ui vertical very padded segment">
+          <h2 class="ui header">GitHub (Repositories)</h2>
+
+          <div class="ui form">
+            <div class="two fields">
+              <div class="field">
+                <label for="github-ownerName">Organization/User Login</label>
+                <input type="text" id="github-ownerName" v-model="githubOwner"/>
+              </div>
+              <div class="field">
+                <label for="github-repositoryName">Repository Name</label>
+                <input type="text" id="github-repositoryName" v-model="githubRepo"/>
+              </div>
+            </div>
+          </div>
+
+          <table class="ui very basic table">
+            <tbody>
+              <tr>
+                <td><strong>Activity</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/activity'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/repository/' + githubOwner + '/' + githubRepo + '/activity' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Fork Count</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/forks'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/repository/' + githubOwner + '/' + githubRepo + '/forks' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Open Issue Count</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/issues'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/repository/' + githubOwner + '/' + githubRepo + '/issues' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Language</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/language'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/repository/' + githubOwner + '/' + githubRepo + '/language' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>License</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/license'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/repository/' + githubOwner + '/' + githubRepo + '/license' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Release</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/release'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/repository/' + githubOwner + '/' + githubRepo + '/release' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Stargazer Count</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/stars'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/repository/' + githubOwner + '/' + githubRepo + '/stars' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Subscriber Count</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/subscribers'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/repository/' + githubOwner + '/' + githubRepo + '/subscribers' }}</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Watchers Count</strong></td>
+                <td class="collapsing">
+                  <img
+                      v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/watchers'"/>
+                </td>
+                <td class="collapsing">
+                  <code><span th:remove="tag" th:text="${#httpServletRequest.requestURL}"></span>{{
+                    'github/repository/' + githubOwner + '/' + githubRepo + '/watchers' }}</code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </main>
+    <footer id="page-footer" class="ui inverted segment">
+      <div class="ui equal width bottom aligned container grid">
+        <div class="column">
+          <h5 class="ui inverted header">Project</h5>
+          <div class="ui inverted link list">
+            <a href="https://github.com/dotStart/Badges" class="item">Contribute on GitHub</a>
+            <a href="https://github.com/dotStart" class="item">Provided by @dotStart</a>
+          </div>
+        </div>
+        <div class="column">
+          <p class="license">
+            Proudly provided under the terms of the
+            <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache License, Version
+              2.0</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
