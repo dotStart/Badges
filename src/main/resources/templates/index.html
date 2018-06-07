@@ -11,11 +11,37 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
       $(document).ready(function () {
+        Vue.component(
+            'badge-type',
+            {
+              props: [
+                'name',
+                'url'
+              ],
+              data: function () {
+                return {
+                  base: /*[[${#httpServletRequest.requestURL}]]*/''
+                }
+              },
+              methods: {
+                copy: function (event) {
+                  var el = event.currentTarget.previousElementSibling;
+                  el.focus();
+                  el.select();
+                  document.execCommand('copy');
+                }
+              },
+              template: '#badge-type'
+            }
+        );
+
         var app = new Vue({
           el: '#page-body',
           data: {
+            base: /*[[${#httpServletRequest.requestURL}]]*/'',
+
             gitlabId: '6712167',
 
             githubUsr: 'dotStart',
@@ -36,9 +62,24 @@
           }
         });
 
+        window.copyUrl = function (el) {
+        };
+
         $('.ui.dropdown').dropdown();
         console.log('Do you want to see my Badge?');
       });
+    </script>
+    <script type="text/x-template" id="badge-type">
+      <tr>
+        <td><strong>{{ name }}</strong></td>
+        <td class="collapsing"><img v-bind:src="url"/></td>
+        <td class="collapsing">
+          <div class="ui right action url input">
+            <input readonly type="text" v-bind:value="base + url"/>
+            <button class="ui icon button" v-on:click="copy($event)"><i class="copy icon"></i></button>
+          </div>
+        </td>
+      </tr>
     </script>
 
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css"/>
@@ -65,10 +106,9 @@
         color: #fff;
       }
 
-      code {
-        padding: 2px 4px;
-        background-color: #eeeeee;
-        border-radius: 3px;
+      .url.input input {
+        min-width: 300px;
+        width: 22vw;
       }
     </style>
   </head>
@@ -110,50 +150,10 @@
 
           <table class="ui very basic table">
             <tbody>
-              <tr>
-                <td><strong>Activity</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'gitlab/project/' + gitlabId + '/activity'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>gitlab/project/{{ e(gitlabId) }}/activity
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Fork Count</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'gitlab/project/' + gitlabId + '/forks'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>gitlab/project/{{ e(gitlabId) }}/forks
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Open Issue Count</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'gitlab/project/' + gitlabId + '/issues'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>gitlab/project/{{ e(gitlabId) }}/issues
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Stargazer Count</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'gitlab/project/' + gitlabId + '/stars'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>gitlab/project/{{ e(gitlabId) }}/stars
-                  </code>
-                </td>
-              </tr>
+              <tr is="badge-type" name="Activity" v-bind:url="'gitlab/project/'+e(gitlabId)+'/activity'"></tr>
+              <tr is="badge-type" name="Fork Count" v-bind:url="'gitlab/project/'+e(gitlabId)+'/activity'"></tr>
+              <tr is="badge-type" name="Open Issue Count" v-bind:url="'gitlab/project/'+e(gitlabId)+'/issues'"></tr>
+              <tr is="badge-type" name="Stargazer Count" v-bind:url="'gitlab/project/'+e(gitlabId)+'/stars'"></tr>
             </tbody>
           </table>
         </section>
@@ -169,83 +169,13 @@
 
           <table class="ui very basic table">
             <tbody>
-              <tr>
-                <td><strong>Company</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/user/' + githubUsr + '/company'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/company
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Location</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/user/' + githubUsr + '/location'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/location
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Hireable</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/user/' + githubUsr + '/hireable'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/hireable
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Repository Count</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/user/' + githubUsr + '/repositories'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/repositories
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Gist Count</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/user/' + githubUsr + '/gists'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/gists
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Follower Count</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/user/' + githubUsr + '/followers'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/followers
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Following Count</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/user/' + githubUsr + '/following'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/user/{{ e(githubUsr) }}/following
-                  </code>
-                </td>
-              </tr>
+              <tr is="badge-type" name="Company" v-bind:url="'github/user/'+e(githubUsr)+'/company'"></tr>
+              <tr is="badge-type" name="Location" v-bind:url="'github/user/'+e(githubUsr)+'/location'"></tr>
+              <tr is="badge-type" name="Hireable" v-bind:url="'github/user/'+e(githubUsr)+'/hireable'"></tr>
+              <tr is="badge-type" name="Repository Count" v-bind:url="'github/user/'+e(githubUsr)+'/repositories'"></tr>
+              <tr is="badge-type" name="Gist Count" v-bind:url="'github/user/'+e(githubUsr)+'/gists'"></tr>
+              <tr is="badge-type" name="Follower Count" v-bind:url="'github/user/'+e(githubUsr)+'/followers'"></tr>
+              <tr is="badge-type" name="Following Count" v-bind:url="'github/user/'+e(githubUsr)+'/following'"></tr>
             </tbody>
           </table>
         </section>
@@ -261,28 +191,8 @@
 
           <table class="ui very basic table">
             <tbody>
-              <tr>
-                <td><strong>Location</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/organization/' + githubOrg + '/location'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/organization/{{ e(githubOrg) }}/location
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Repository Count</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/organization/' + githubOrg + '/repositories'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/organization/{{ e(githubOrg) }}/repositories
-                  </code>
-                </td>
-              </tr>
+              <tr is="badge-type" name="Location" v-bind:url="'github/organization/'+e(githubOrg)+'/location'"></tr>
+              <tr is="badge-type" name="Repository Count" v-bind:url="'github/organization/'+e(githubOrg)+'/repositories'"></tr>
             </tbody>
           </table>
         </section>
@@ -304,105 +214,15 @@
 
           <table class="ui very basic table">
             <tbody>
-              <tr>
-                <td><strong>Activity</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/activity'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/activity
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Fork Count</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/forks'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/forks
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Open Issue Count</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/issues'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/issues
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Language</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/language'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/language
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>License</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/license'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/license
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Release</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/release'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/release
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Stargazer Count</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/stars'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/stars
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Subscriber Count</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/subscribers'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/subscribers
-                  </code>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Watchers Count</strong></td>
-                <td class="collapsing">
-                  <img v-bind:src="'github/repository/' + githubOwner + '/' + githubRepo + '/watchers'"/>
-                </td>
-                <td class="collapsing">
-                  <code>
-                    <span th:text="${base}"></span>github/repository/{{ e(githubOwner) }}/{{ e(githubRepo) }}/watchers
-                  </code>
-                </td>
-              </tr>
+              <tr is="badge-type" name="Activity" v-bind:url="'github/repository/'+e(githubOwner)+'/'+e(githubRepo)+'/activity'"></tr>
+              <tr is="badge-type" name="Fork Count" v-bind:url="'github/repository/'+e(githubOwner)+'/'+e(githubRepo)+'/forks'"></tr>
+              <tr is="badge-type" name="Open Issue Count" v-bind:url="'github/repository/'+e(githubOwner)+'/'+e(githubRepo)+'/issues'"></tr>
+              <tr is="badge-type" name="Language" v-bind:url="'github/repository/'+e(githubOwner)+'/'+e(githubRepo)+'/language'"></tr>
+              <tr is="badge-type" name="License" v-bind:url="'github/repository/'+e(githubOwner)+'/'+e(githubRepo)+'/license'"></tr>
+              <tr is="badge-type" name="Latest Release" v-bind:url="'github/repository/'+e(githubOwner)+'/'+e(githubRepo)+'/release'"></tr>
+              <tr is="badge-type" name="Stargazer Count" v-bind:url="'github/repository/'+e(githubOwner)+'/'+e(githubRepo)+'/stars'"></tr>
+              <tr is="badge-type" name="Subscriber Count" v-bind:url="'github/repository/'+e(githubOwner)+'/'+e(githubRepo)+'/subscribers'"></tr>
+              <tr is="badge-type" name="Watcher Count" v-bind:url="'github/repository/'+e(githubOwner)+'/'+e(githubRepo)+'/watchers'"></tr>
             </tbody>
           </table>
         </section>
