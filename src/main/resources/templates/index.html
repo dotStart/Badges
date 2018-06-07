@@ -98,7 +98,8 @@
       }
 
       .license,
-      .license a {
+      .license a,
+      .build-metadata {
         color: rgba(255, 255, 255, 0.4);
       }
 
@@ -287,6 +288,9 @@
           </div>
         </div>
         <div class="right aligned computer only column">
+          <p class="build-metadata" th:inline="text">
+            [[${@badgeVersion.name}]] v[[${@badgeVersion.version}]]+[[${@badgeVersion.revision}]] ([[${@badgeVersion.timestamp}]])
+          </p>
           <p class="license">
             Proudly provided under the terms of the
             <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache License, Version 2.0</a>
