@@ -7,10 +7,10 @@
     <path fill="#555" th:attr="d='M0 0h' + ${badge.titleWidth + padding * 2} + 'v20H0z'"/>
     <path th:attr="fill=${badge.backgroundColorCode}, d='M' + ${badge.titleWidth + padding * 2} + ' 0h' + ${badge.valueWidth + badge.titleWidth + padding * 4} + 'v20H' + ${badge.titleWidth + padding * 2} + 'z'"/>
   </g>
-  <g fill="#ffffff" text-anchor="middle" font-family="Roboto,DejaVu Sans,Verdana,Geneva,Helvetica Neue,Helvetica,sans-serif" font-size="11">
-    <text th:attr="x=${badge.titleWidth / 2 + padding}, textLength=${badge.titleWidth}" y="15" fill="#010101" fill-opacity=".3" th:text="${badge.title}"></text>
-    <text th:attr="x=${badge.titleWidth / 2 + padding}, textLength=${badge.titleWidth}" y="14" th:text="${badge.title}"></text>
-    <text th:attr="x=${badge.titleWidth + badge.valueWidth / 2 + padding * 3}, textLength=${badge.valueWidth}" y="15" fill="#010101" fill-opacity=".3" th:text="${badge.value}"></text>
-    <text th:attr="x=${badge.titleWidth + badge.valueWidth / 2 + padding * 3}, textLength=${badge.valueWidth}, fill=${badge.textColorCode}" y="14" th:text="${badge.value}"></text>
+  <g fill="#ffffff" font-family="Roboto,DejaVu Sans,Verdana,Geneva,Helvetica Neue,Helvetica,sans-serif" font-size="11">
+    <text th:attr="x=${padding}, textLength=${badge.titleWidth}" y="15" fill="#010101" fill-opacity=".3" th:text="${badge.title}"></text>
+    <text th:attr="x=${padding}, textLength=${badge.titleWidth}" y="14" th:text="${badge.title}"></text>
+    <text th:attr="x=${badge.titleWidth + padding * 3}, textLength=${badge.valueWidth}" y="15" fill="#010101" fill-opacity=".3" th:text="${badge.value}"></text>
+    <text th:attr="x=${badge.titleWidth + padding * 3}, textLength=${badge.valueWidth}, fill=${badge.textColorCode}" y="14" th:text="${badge.value}"></text>
   </g>
 </svg>
