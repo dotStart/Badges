@@ -169,6 +169,7 @@ public class Badge implements Serializable {
     // Named Values
     DEFAULT(BLUE.backgroundColor, BLUE.textColor),
     FALLBACK(GREY.backgroundColor, GREY.textColor),
+    PENDING(TEAL.backgroundColor, TEAL.textColor),
     SUCCESS(GREEN.backgroundColor, GREEN.textColor),
     WARNING(ORANGE.backgroundColor, ORANGE.textColor),
     FAILURE(RED.backgroundColor, RED.textColor);
