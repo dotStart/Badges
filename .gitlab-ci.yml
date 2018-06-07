@@ -23,7 +23,7 @@ deploy_staging:
   environment:
     name: staging
   only:
-    - development
+    - develop
 
 deploy_production:
   stage: deploy
