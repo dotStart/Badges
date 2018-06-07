@@ -40,11 +40,22 @@ public class WebConfiguration implements WebMvcConfigurer {
   @Override
   public void addInterceptors(@NonNull InterceptorRegistry registry) {
     var cacheInterceptor = new WebContentInterceptor();
+
+    // fallback value
     cacheInterceptor.setCacheControl(
         CacheControl.maxAge(1, TimeUnit.HOURS)
             .cachePublic()
             .noTransform()
     );
+
+    // custom badges
+    cacheInterceptor.addCacheMapping(
+        CacheControl.maxAge(3, TimeUnit.DAYS)
+            .cachePublic()
+            .noTransform(),
+        "/custom/**"
+    );
+
     registry.addInterceptor(cacheInterceptor);
   }
 
