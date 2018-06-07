@@ -37,6 +37,7 @@ public final class BadgeVersion {
   private final String name;
   private final String version;
   private final String revision;
+  private final String shortRevision;
   private final Instant timestamp;
 
   public BadgeVersion() {
@@ -56,6 +57,13 @@ public final class BadgeVersion {
     this.name = properties.getProperty("application.name", "unknown");
     this.version = properties.getProperty("application.version", "0.0.0");
     this.revision = properties.getProperty("application.revision", "+dev");
+
+    // jgit does not support the generation of shortened ids through the maven plugin
+    if (this.revision.length() > 7) {
+      this.shortRevision = this.revision.substring(0, 7);
+    } else {
+      this.shortRevision = this.revision;
+    }
 
     var parsedTimestamp = Instant.EPOCH;
     try {
@@ -79,6 +87,11 @@ public final class BadgeVersion {
   @NonNull
   public String getRevision() {
     return this.revision;
+  }
+
+  @NonNull
+  public String getShortRevision() {
+    return this.shortRevision;
   }
 
   @NonNull

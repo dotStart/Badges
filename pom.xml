@@ -197,7 +197,19 @@
         <configuration>
           <revisionOnScmFailure>dev</revisionOnScmFailure>
           <shortRevisionLength>7</shortRevisionLength>
+
+          <providerImplementations>
+            <git>jgit</git>
+          </providerImplementations>
         </configuration>
+
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-provider-jgit</artifactId>
+            <version>1.9.5</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
