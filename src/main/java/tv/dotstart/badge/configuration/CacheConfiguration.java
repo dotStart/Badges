@@ -17,6 +17,7 @@
 package tv.dotstart.badge.configuration;
 
 import java.time.Duration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -33,6 +34,13 @@ import org.springframework.lang.NonNull;
 @Configuration
 public class CacheConfiguration {
 
+  private final Duration dynamicCacheDuration;
+
+  public CacheConfiguration(
+      @NonNull @Value("${badge.cache.dynamic:PT1H}") String dynamicCacheDuration) {
+    this.dynamicCacheDuration = Duration.parse(dynamicCacheDuration);
+  }
+
   /**
    * Provides a customized cache manager implementation which uses an arbitrary Redis server for
    * semi-permanent storage.
@@ -46,7 +54,7 @@ public class CacheConfiguration {
     return RedisCacheManager.builder(connectionFactory)
         .cacheDefaults(
             RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofHours(1))
+                .entryTtl(this.dynamicCacheDuration)
         )
         .build();
   }

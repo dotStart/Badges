@@ -16,7 +16,10 @@
  */
 package tv.dotstart.badge.configuration;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
+import org.apache.logging.log4j.LogManager;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
 import org.springframework.lang.NonNull;
@@ -34,6 +37,20 @@ import org.springframework.web.servlet.mvc.WebContentInterceptor;
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 
+  private final Duration dynamicCacheDuration;
+  private final Duration staticCacheDuration;
+
+  public WebConfiguration(
+      @NonNull @Value("${badge.cache.dynamic:PT1H}") String dynamicCacheDuration,
+      @NonNull @Value("${badge.cache.static:P3D}") String staticCacheDuration) {
+    this.dynamicCacheDuration = Duration.parse(dynamicCacheDuration);
+    this.staticCacheDuration = Duration.parse(staticCacheDuration);
+
+    var logger = LogManager.getFormatterLogger(WebConfiguration.class);
+    logger.info("Dynamic cache duration: %s", this.dynamicCacheDuration);
+    logger.info("Static cache duration: %s", this.staticCacheDuration);
+  }
+
   /**
    * {@inheritDoc}
    */
@@ -43,14 +60,14 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     // fallback value
     cacheInterceptor.setCacheControl(
-        CacheControl.maxAge(1, TimeUnit.HOURS)
+        CacheControl.maxAge(this.dynamicCacheDuration.toSeconds(), TimeUnit.SECONDS)
             .cachePublic()
             .noTransform()
     );
 
     // custom badges
     cacheInterceptor.addCacheMapping(
-        CacheControl.maxAge(3, TimeUnit.DAYS)
+        CacheControl.maxAge(this.staticCacheDuration.toSeconds(), TimeUnit.SECONDS)
             .cachePublic()
             .noTransform(),
         "/custom/**"
