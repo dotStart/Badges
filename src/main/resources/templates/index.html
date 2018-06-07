@@ -446,7 +446,7 @@
           </section>
 
           <div class="ui center aligned grid">
-            <div class="two wide column" th:each="color : ${T(tv.dotstart.badge.badge.Badge.Color).values()}">
+            <div class="three wide column" th:each="color : ${T(tv.dotstart.badge.badge.Badge.Color).values()}">
               <img th:src="@{/custom/{color}/color/{color}(color=${color.name().toLowerCase()})}"/>
             </div>
           </div>
