@@ -269,7 +269,7 @@
             </p>
           </section>
 
-          <div class="ui center aligned grid">
+          <div class="ui center aligned computer only grid">
             <div class="three wide column" th:each="color : ${T(tv.dotstart.badge.badge.Badge.Color).values()}">
               <img th:src="@{/custom/{color}/color/{color}(color=${color.name().toLowerCase()})}"/>
             </div>
@@ -278,7 +278,7 @@
       </div>
     </main>
     <footer id="page-footer" class="ui inverted vertical segment">
-      <div class="ui equal width bottom aligned container grid">
+      <div class="ui equal width bottom aligned stackable container grid">
         <div class="column">
           <h5 class="ui inverted header">Project</h5>
           <div class="ui inverted link list">
@@ -286,7 +286,7 @@
             <a href="https://github.com/dotStart" class="item">Provided by @dotStart</a>
           </div>
         </div>
-        <div class="right aligned column">
+        <div class="right aligned computer only column">
           <p class="license">
             Proudly provided under the terms of the
             <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache License, Version 2.0</a>
