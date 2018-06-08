@@ -37,6 +37,8 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
     <java.version>10</java.version>
+
+    <badge.mode>production</badge.mode> <!-- production, staging or development -->
   </properties>
 
   <!-- Artifact Metadata -->
@@ -231,7 +233,7 @@
           <jdkVersion>10</jdkVersion>
 
           <processTypes>
-            <web>java -Dserver.port=$PORT -Dspring.redis.url=$REDIS_URL -jar target/Badge.jar</web>
+            <web>java -Dserver.port=$PORT -Dspring.profiles.active=${badge.mode} -Dspring.redis.url=$REDIS_URL -jar target/Badge.jar</web>
           </processTypes>
         </configuration>
       </plugin>

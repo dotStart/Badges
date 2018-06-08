@@ -19,7 +19,7 @@ build:
 deploy_staging:
   stage: deploy
   script:
-    - mvn heroku:deploy -Dheroku.appName=$HEROKU_APP_STAGING
+    - mvn heroku:deploy -Dheroku.appName=$HEROKU_APP_STAGING -Dbadge.mode=staging
   environment:
     name: staging
   only:
