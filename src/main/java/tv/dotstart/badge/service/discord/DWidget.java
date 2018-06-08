@@ -18,6 +18,7 @@ package tv.dotstart.badge.service.discord;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +30,7 @@ import org.springframework.lang.Nullable;
  *
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  */
-public class DWidget {
+public class DWidget implements Serializable {
 
   private final String id;
   private final List<Channel> channels;
@@ -96,7 +97,7 @@ public class DWidget {
     DND
   }
 
-  public static class Channel {
+  public static class Channel implements Serializable {
 
     private final String id;
     private final String name;
@@ -150,7 +151,7 @@ public class DWidget {
     }
   }
 
-  public static class Member {
+  public static class Member implements Serializable {
 
     private final String id;
     private final String name;
