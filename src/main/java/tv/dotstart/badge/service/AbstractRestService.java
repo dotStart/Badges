@@ -16,10 +16,13 @@
  */
 package tv.dotstart.badge.service;
 
+import com.fasterxml.jackson.databind.MapperFeature;
 import java.io.FileNotFoundException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.lang.NonNull;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -34,6 +37,16 @@ import org.springframework.web.client.RestTemplate;
 public abstract class AbstractRestService {
 
   private final RestTemplate rest = new RestTemplate();
+
+  public AbstractRestService() {
+    this.rest.getMessageConverters()
+        .removeIf((conv) -> conv instanceof MappingJackson2HttpMessageConverter);
+    this.rest.getMessageConverters().add(new MappingJackson2HttpMessageConverter(
+        Jackson2ObjectMapperBuilder.json()
+            .featuresToEnable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+            .build()
+    ));
+  }
 
   /**
    * Extends the headers which are to be sent along with every single request.
