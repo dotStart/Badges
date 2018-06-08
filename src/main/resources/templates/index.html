@@ -118,6 +118,23 @@
     </style>
   </head>
   <body>
+    <header th:if="${@environment.acceptsProfiles('development', 'staging')}" id="page-warning" class="ui inverted red vertical padded segment">
+      <div class="ui middle aligned container grid">
+        <div class="one wide column">
+          <i class="ui big warning sign icon"></i>
+        </div>
+        <div class="twelve wide column">
+          <p>
+            This application instance is running in development or staging mode<br />
+            As such, endpoints may fail to respond, perform badly or otherwise differ from the
+            specification
+          </p>
+        </div>
+        <div class="three wide right aligned column">
+          <a href="https://badges.dotstart.tv" class="ui inverted button">Back to Safety</a>
+        </div>
+      </div>
+    </header>
     <header id="page-header" class="ui inverted vertical orange segment">
       <div class="ui container">
         <div class="ui large inverted secondary menu">
