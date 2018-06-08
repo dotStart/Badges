@@ -2,7 +2,7 @@ image: maven:3.5.3-jdk-10
 
 cache:
   paths:
-    - .m2/repository/
+    - ~/.m2/repository/
 
 stages:
  - build
