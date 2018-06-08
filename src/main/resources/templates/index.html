@@ -42,10 +42,9 @@
           data: {
             base: /*[[${#httpServletRequest.requestURL}]]*/'',
 
+            discordGuildId: '252100053093711872',
             gitlabId: '6712167',
-
             githubUsr: 'dotStart',
-
             githubOrg: 'GitHub',
 
             githubOwner: 'dotStart',
@@ -125,7 +124,7 @@
         </div>
         <div class="twelve wide column">
           <p>
-            This application instance is running in development or staging mode<br />
+            This application instance is running in development or staging mode<br/>
             As such, endpoints may fail to respond, perform badly or otherwise differ from the
             specification
           </p>
@@ -159,6 +158,28 @@
           <h2 class="ui header">JavaScript is required</h2>
           <p>This site makes heavy use of JavaScript and will not operate correctly without it</p>
         </noscript>
+
+        <section class="ui vertical very padded segment">
+          <h2 class="ui header">Discord</h2>
+
+          <div class="ui form">
+            <div class="field">
+              <label for="discord-guildId">Guild ID</label>
+              <input type="text" id="discord-guildId" v-model.lazy="discordGuildId"/>
+            </div>
+          </div>
+
+          <table class="ui very basic table">
+            <tbody>
+              <tr is="badge-type" name="Online Members *" v-bind:url="'discord/guild/'+e(discordGuildId)+'/members'"></tr>
+              <tr is="badge-type" name="Members in Voice Channels *" v-bind:url="'discord/guild/'+e(discordGuildId)+'/voice'"></tr>
+            </tbody>
+          </table>
+
+          <p>
+            <small>* Requires the HTML widget to be enabled in the server settings</small>
+          </p>
+        </section>
 
         <section class="ui vertical very padded segment">
           <h2 class="ui header">GitLab</h2>
