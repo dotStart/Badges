@@ -30,7 +30,7 @@ build:
 deploy_staging:
   stage: deploy
   script:
-    - mvn heroku:deploy -Dheroku.appName=$HEROKU_APP_STAGING -Dbadge.mode=staging
+    - mvn $MAVEN_CLI_OPTS heroku:deploy -Dheroku.appName=$HEROKU_APP_STAGING -Dbadge.mode=staging
   environment:
     name: staging
   only:
