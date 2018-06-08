@@ -56,6 +56,22 @@ public abstract class AbstractRestService {
   }
 
   /**
+   * Translates HTTP error responses into more reasonable Java exceptions.
+   *
+   * @param endpoint an arbitrary endpoint.
+   * @param cause an error cause.
+   */
+  @NonNull
+  protected void translateException(@NonNull String endpoint,
+      @NonNull HttpClientErrorException cause) throws FileNotFoundException {
+    if (cause.getStatusCode() == HttpStatus.NOT_FOUND) {
+      throw new FileNotFoundException("No such object: " + endpoint);
+    }
+
+    throw cause;
+  }
+
+  /**
    * Performs an HTTP get request on an arbitrary endpoint.
    *
    * @param endpoint an endpoint (relative to the API base URL).
@@ -77,11 +93,8 @@ public abstract class AbstractRestService {
           .exchange(this.translateUrl(endpoint), HttpMethod.GET, new HttpEntity<>(headers), type,
               (Object[]) urlVariables).getBody();
     } catch (HttpClientErrorException ex) {
-      if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {
-        throw new FileNotFoundException("No such object: " + endpoint);
-      }
-
-      throw ex;
+      this.translateException(endpoint, ex);
+      return null; // makes the compiler happy
     }
   }
 }
