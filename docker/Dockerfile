@@ -1,7 +1,8 @@
 FROM openjdk:10-jdk AS build
 ARG ref=master
 
-RUN apt-get install -y maven && \
+RUN apt-get update && \
+    apt-get install -y maven && \
     git clone https://github.com/dotStart/Badges /usr/src/Badges && \
     cd /usr/src/Badges && \
     git checkout $ref && \
