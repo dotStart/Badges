@@ -32,7 +32,7 @@ build:
 docker:
   stage: deploy
   image: docker:git
-  service:
+  services:
     - docker:dind
   script:
     - docker info
