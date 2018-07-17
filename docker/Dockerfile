@@ -4,7 +4,7 @@ ARG ref=master
 RUN apt-get update && \
     apt-get install -y maven && \
     git clone https://github.com/dotStart/Badges /usr/src/badges && \
-    cd /usr/src/Badges && \
+    cd /usr/src/badges && \
     git checkout $ref && \
     mvn clean package
 
