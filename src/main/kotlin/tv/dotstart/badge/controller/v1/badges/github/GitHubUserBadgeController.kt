@@ -82,6 +82,16 @@ class GitHubUserBadgeController(
             )
           }
 
+  @RequestMapping("/repositories")
+  fun publicRepos(@PathVariable username: String) =
+      this.getUser(username)
+          .map { badge("repositories", it.publicRepos.toString(), Color.BLUE) }
+
+  @RequestMapping("/gists")
+  fun publicGists(@PathVariable username: String) =
+      this.getUser(username)
+          .map { badge("gists", it.publicGists.toString(), Color.BLUE) }
+
   @RequestMapping("/followers")
   fun followers(@PathVariable username: String) =
       this.getUser(username)
