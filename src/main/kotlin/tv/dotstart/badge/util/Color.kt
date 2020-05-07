@@ -48,6 +48,10 @@ enum class Color(val value: Int, val textValue: Int = 0xFFFFFF) {
   DEFAULT(BLUE.value, BLUE.textValue),
   FALLBACK(GREY.value, GREY.textValue),
   PENDING(TEAL.value, TEAL.textValue),
+
+  POSITIVE(GREEN.value, GREEN.textValue),
+  NEGATIVE(RED.value, RED.textValue),
+
   SUCCESS(GREEN.value, GREEN.textValue),
   WARNING(ORANGE.value, ORANGE.textValue),
   FAILURE(RED.value, RED.textValue);
