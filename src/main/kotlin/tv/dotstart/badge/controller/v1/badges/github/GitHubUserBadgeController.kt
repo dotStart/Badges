@@ -36,7 +36,13 @@ import tv.dotstart.badge.util.badge
  */
 @RestController
 @ConditionalOnGitHubConnector
-@BadgeCategory("github.user", BadgeCategory.DefaultValue("username", "dotStart"))
+@BadgeCategory(
+    "github.user",
+    ["user"],
+    [
+      BadgeCategory.DefaultValue("username", "dotStart")
+    ]
+)
 @RequestMapping("/v1/badge/github/user/{username}")
 class GitHubUserBadgeController(
     private val github: GitHub,

@@ -27,7 +27,8 @@ package tv.dotstart.badge.service.badge.annotation
 @Retention(AnnotationRetention.RUNTIME)
 annotation class BadgeCategory(
     val name: String,
-    vararg val parameters: DefaultValue) {
+    val tags: Array<String>,
+    val parameters: Array<DefaultValue>) {
 
   annotation class DefaultValue(val name: String, val value: String)
 }

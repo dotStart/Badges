@@ -65,7 +65,11 @@ class BadgeIndex(private val mapping: RequestMappingHandlerMapping) : Iterable<B
               .map { it.name to it.value }
               .toMap()
 
-          BadgeScope(category.name, parameters, parameterDefaults, pathList)
+          BadgeScope(category.name,
+                     category.tags.toList(),
+                     parameters,
+                     parameterDefaults,
+                     pathList)
         }
   }
 

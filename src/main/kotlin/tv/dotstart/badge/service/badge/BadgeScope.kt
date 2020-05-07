@@ -24,6 +24,7 @@ package tv.dotstart.badge.service.badge
  */
 data class BadgeScope(
     val name: String,
+    val tags: List<String>,
     val parameters: List<String>,
     val parameterDefaults: Map<String, String>,
     val paths: List<String>)
