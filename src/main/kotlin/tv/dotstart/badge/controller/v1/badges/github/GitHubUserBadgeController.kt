@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import tv.dotstart.badge.configuration.properties.annotations.ConditionalOnGitHubConnector
+import tv.dotstart.badge.service.badge.annotation.BadgeCategory
+import tv.dotstart.badge.service.badge.annotation.BadgeMapping
 import tv.dotstart.badge.service.cache.CacheProvider
 import tv.dotstart.badge.service.github.GitHub
 import tv.dotstart.badge.service.github.model.User
@@ -34,6 +36,7 @@ import tv.dotstart.badge.util.badge
  */
 @RestController
 @ConditionalOnGitHubConnector
+@BadgeCategory("github.user", BadgeCategory.DefaultValue("username", "dotStart"))
 @RequestMapping("/v1/badge/github/user/{username}")
 class GitHubUserBadgeController(
     private val github: GitHub,
@@ -44,22 +47,22 @@ class GitHubUserBadgeController(
   private fun getUser(username: String) =
       this.userCache[username, this.github.getUser(username)]
 
-  @RequestMapping("/name")
+  @BadgeMapping("/name")
   fun name(@PathVariable username: String) =
       this.getUser(username)
           .map { badge("name", it.name, brandColor) }
 
-  @RequestMapping("/company")
+  @BadgeMapping("/company")
   fun company(@PathVariable username: String) =
       this.getUser(username)
           .map { badge("company", it.company, brandColor) }
 
-  @RequestMapping("/location")
+  @BadgeMapping("/location")
   fun location(@PathVariable username: String) =
       this.getUser(username)
           .map { badge("location", it.location, brandColor) }
 
-  @RequestMapping("/hireable")
+  @BadgeMapping("/hireable")
   fun hireable(@PathVariable username: String) =
       this.getUser(username)
           .map {
@@ -82,22 +85,22 @@ class GitHubUserBadgeController(
             )
           }
 
-  @RequestMapping("/repositories")
+  @BadgeMapping("/repositories")
   fun publicRepos(@PathVariable username: String) =
       this.getUser(username)
           .map { badge("repositories", it.publicRepos.toString(), brandColor) }
 
-  @RequestMapping("/gists")
+  @BadgeMapping("/gists")
   fun publicGists(@PathVariable username: String) =
       this.getUser(username)
           .map { badge("gists", it.publicGists.toString(), brandColor) }
 
-  @RequestMapping("/followers")
+  @BadgeMapping("/followers")
   fun followers(@PathVariable username: String) =
       this.getUser(username)
           .map { badge("followers", it.followers.toString(), brandColor) }
 
-  @RequestMapping("/following")
+  @BadgeMapping("/following")
   fun following(@PathVariable username: String) =
       this.getUser(username)
           .map { badge("following", it.following.toString(), brandColor) }
