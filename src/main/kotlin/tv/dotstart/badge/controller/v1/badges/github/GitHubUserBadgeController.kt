@@ -47,26 +47,26 @@ class GitHubUserBadgeController(
   @RequestMapping("/name")
   fun name(@PathVariable username: String) =
       this.getUser(username)
-          .map { badge("name", it.name, Color.BLUE) }
+          .map { badge("name", it.name, brandColor) }
 
   @RequestMapping("/company")
   fun company(@PathVariable username: String) =
       this.getUser(username)
-          .map { badge("company", it.company, Color.BLUE) }
+          .map { badge("company", it.company, brandColor) }
 
   @RequestMapping("/location")
   fun location(@PathVariable username: String) =
       this.getUser(username)
-          .map { badge("location", it.location, Color.BLUE) }
+          .map { badge("location", it.location, brandColor) }
 
   @RequestMapping("/hireable")
   fun hireable(@PathVariable username: String) =
       this.getUser(username)
           .map {
             val color = if (it.hireable) {
-              Color.GREEN
+              Color.POSITIVE
             } else {
-              Color.RED
+              Color.NEGATIVE
             }
 
             val text = if (it.hireable) {
@@ -85,20 +85,20 @@ class GitHubUserBadgeController(
   @RequestMapping("/repositories")
   fun publicRepos(@PathVariable username: String) =
       this.getUser(username)
-          .map { badge("repositories", it.publicRepos.toString(), Color.BLUE) }
+          .map { badge("repositories", it.publicRepos.toString(), brandColor) }
 
   @RequestMapping("/gists")
   fun publicGists(@PathVariable username: String) =
       this.getUser(username)
-          .map { badge("gists", it.publicGists.toString(), Color.BLUE) }
+          .map { badge("gists", it.publicGists.toString(), brandColor) }
 
   @RequestMapping("/followers")
   fun followers(@PathVariable username: String) =
       this.getUser(username)
-          .map { badge("followers", it.followers.toString(), Color.BLUE) }
+          .map { badge("followers", it.followers.toString(), brandColor) }
 
   @RequestMapping("/following")
   fun following(@PathVariable username: String) =
       this.getUser(username)
-          .map { badge("following", it.following.toString(), Color.BLUE) }
+          .map { badge("following", it.following.toString(), brandColor) }
 }
