@@ -249,6 +249,10 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+
+        <configuration>
+          <mainClass>tv.dotstart.badge.BadgeApplicationKt</mainClass>
+        </configuration>
       </plugin>
     </plugins>
   </build>
