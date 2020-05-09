@@ -53,12 +53,6 @@ class GitHubOrganizationBadgeController(
   fun getOrganization(username: String) =
       this.cache[username, this.gitHub.getOrganization(username)]
 
-  @BadgeMapping("/company")
-  fun company(@PathVariable username: String) = this.getOrganization(username)
-      .flatMap { Mono.justOrEmpty(it.company) }
-      .map { badge("company", it, brandColor) }
-      .switchIfEmpty(Mono.just(badge("company", "unknown", Color.FALLBACK)))
-
   @BadgeMapping("/location")
   fun location(@PathVariable username: String) = this.getOrganization(username)
       .flatMap { Mono.justOrEmpty(it.location) }
@@ -72,10 +66,6 @@ class GitHubOrganizationBadgeController(
   @BadgeMapping("/repositories")
   fun publicRepos(@PathVariable username: String) = this.getOrganization(username)
       .map { badge("repositories", it.publicRepos.toString(), brandColor) }
-
-  @BadgeMapping("/gists")
-  fun publicGists(@PathVariable username: String) = this.getOrganization(username)
-      .map { badge("gists", it.publicGists.toString(), brandColor) }
 
   @BadgeMapping("/created")
   fun createdAt(@PathVariable username: String) = this.getOrganization(username)
