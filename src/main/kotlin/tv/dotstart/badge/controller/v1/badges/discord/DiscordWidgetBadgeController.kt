@@ -19,6 +19,7 @@ package tv.dotstart.badge.controller.v1.badges.discord
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import tv.dotstart.badge.configuration.properties.annotations.ConditionalOnDiscordConnector
 import tv.dotstart.badge.service.badge.annotation.BadgeCategory
 import tv.dotstart.badge.service.badge.annotation.BadgeMapping
 import tv.dotstart.badge.service.cache.CacheProvider
@@ -31,6 +32,7 @@ import tv.dotstart.badge.util.badge
  * @date 09/05/2020
  */
 @RestController
+@ConditionalOnDiscordConnector
 @BadgeCategory(
     "discord.widget",
     ["chat"],
