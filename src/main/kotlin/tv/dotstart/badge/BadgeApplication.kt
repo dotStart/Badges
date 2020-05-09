@@ -18,11 +18,13 @@ package tv.dotstart.badge
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.scheduling.annotation.EnableScheduling
 
 /**
  * @author <a href="mailto:johannesd@torchmind.com">Johannes Donath</a>
  * @date 06/05/2020
  */
+@EnableScheduling
 @SpringBootApplication
 class BadgeApplication
 
