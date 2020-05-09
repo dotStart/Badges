@@ -1,14 +1,13 @@
-FROM openjdk:10-jdk AS build
-ARG ref=master
+FROM adoptopenjdk:11-jdk-hotspot AS build
 
 RUN apt-get update && \
     apt-get install -y maven && \
-    git clone https://github.com/dotStart/Badges /usr/src/badges && \
-    cd /usr/src/badges && \
-    git checkout $ref && \
-    mvn clean package
+    mkdir -p /usr/src/badges
 
-FROM openjdk:10-slim
+ADD pom.xml /usr/src/badges
+ADD src /usr/src/badges/
+
+FROM adoptopenjdk:11-jre-hotspot
 
 RUN mkdir -p /opt/badges && \
     useradd -MU -d /opt/badges badges && \
