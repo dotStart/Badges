@@ -17,6 +17,7 @@
 package tv.dotstart.badge.util
 
 import java.time.Duration
+import java.time.OffsetDateTime
 import java.time.Period
 
 /**
@@ -26,18 +27,28 @@ import java.time.Period
  * @date 09/05/2020
  */
 
-fun Duration.toHumanReadableString(): String {
-  if (this.toDaysPart() > Int.MAX_VALUE) {
-    return "forever"
-  }
+/**
+ * Retrieves a human readable string which represents the amount of time which has passed since a
+ * given date and time.
+ */
+val OffsetDateTime.passedTimeSince: String
+  get() {
+    val inputDate = this.toLocalDate()
 
-  val period = Period.ofDays(this.toDaysPart().toInt())
-  return when {
-    period.years > 0 -> "${period.years} years"
-    this.toDaysPart() > 0 -> "${toDaysPart()} days"
-    this.toHoursPart() > 0 -> "${toHoursPart()} hours"
-    this.toMinutesPart() > 0 -> "${toMinutesPart()} minutes"
-    this.toSecondsPart() > 0 -> "${toSecondsPart()} seconds"
-    else -> "now"
+    val now = OffsetDateTime.now()
+    val nowDate = now.toLocalDate()
+
+    val period = Period.between(inputDate, nowDate)
+    if (period.years > 0) {
+      return "${period.years} years"
+    }
+
+    val duration = Duration.between(this, now)
+    return when {
+      duration.toDaysPart() > 0 -> "${duration.toDaysPart()} days"
+      duration.toHoursPart() > 0 -> "${duration.toHoursPart()} hours"
+      duration.toMinutesPart() > 0 -> "${duration.toMinutesPart()} minutes"
+      duration.toSecondsPart() > 0 -> "${duration.toSecondsPart()} seconds"
+      else -> "now"
+    }
   }
-}

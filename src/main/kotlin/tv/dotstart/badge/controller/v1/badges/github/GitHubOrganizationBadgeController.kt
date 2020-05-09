@@ -28,9 +28,7 @@ import tv.dotstart.badge.service.connector.github.GitHub
 import tv.dotstart.badge.service.connector.github.model.Organization
 import tv.dotstart.badge.util.Color
 import tv.dotstart.badge.util.badge
-import tv.dotstart.badge.util.toHumanReadableString
-import java.time.Duration
-import java.time.OffsetDateTime
+import tv.dotstart.badge.util.passedTimeSince
 
 /**
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
@@ -81,6 +79,6 @@ class GitHubOrganizationBadgeController(
 
   @BadgeMapping("/created")
   fun createdAt(@PathVariable username: String) = this.getOrganization(username)
-      .map { Duration.between(it.createdAt, OffsetDateTime.now()) }
-      .map { badge("created", "${it.toHumanReadableString()} ago", brandColor) }
+      .map(Organization::createdAt)
+      .map { badge("created", "${it.passedTimeSince} ago", brandColor) }
 }
