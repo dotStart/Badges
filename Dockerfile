@@ -7,6 +7,9 @@ RUN apt-get update && \
 ADD pom.xml /usr/src/badges
 ADD src /usr/src/badges/
 
+WORKDIR /usr/src/badges
+RUN mvn clean package
+
 FROM adoptopenjdk:11-jre-hotspot
 
 RUN mkdir -p /opt/badges && \
