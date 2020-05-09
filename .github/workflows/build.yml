@@ -49,5 +49,5 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: dotStart/Badges/badges
+          repository: dotstart/badges/badges
           tag_with_ref: true
