@@ -16,6 +16,8 @@
  */
 package tv.dotstart.badge.model.v1
 
+import tv.dotstart.badge.service.health.Health
+
 /**
  * Provides basic information about the application health.
  *
@@ -23,12 +25,6 @@ package tv.dotstart.badge.model.v1
  * @date 06/05/2020
  */
 data class SystemHealth(
-    val status: Status,
-    val version: String) {
-
-  enum class Status {
-    OK,
-    DEGRADED,
-    DOWN
-  }
-}
+    val version: String,
+    val status: Health,
+    val checks: Map<String, Health>)

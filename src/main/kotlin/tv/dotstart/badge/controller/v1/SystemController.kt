@@ -17,6 +17,8 @@
 package tv.dotstart.badge.controller.v1
 
 import org.springframework.boot.info.BuildProperties
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
@@ -25,6 +27,8 @@ import reactor.kotlin.core.publisher.toMono
 import tv.dotstart.badge.model.v1.SystemHealth
 import tv.dotstart.badge.model.v1.SystemTraffic
 import tv.dotstart.badge.service.Connector
+import tv.dotstart.badge.service.health.Health
+import tv.dotstart.badge.service.health.HealthCheckManager
 
 /**
  * Provides basic system metadata such as application health and versioning.
@@ -36,14 +40,25 @@ import tv.dotstart.badge.service.Connector
 @RequestMapping("/v1")
 class SystemController(
     private val buildProperties: BuildProperties?,
+    private val healthCheckManager: HealthCheckManager,
     private val connectors: List<Connector>) {
 
-  // at the moment we always return OK since there is no complex health check logic available
   @RequestMapping("/sys/health")
   fun health() = Mono.just(SystemHealth(
-      SystemHealth.Status.OK,
-      this.buildProperties?.version ?: "unknown"
-  ))
+      this.buildProperties?.version ?: "unknown",
+      this.healthCheckManager.health,
+      this.healthCheckManager.checkStatus))
+      .map {
+        val statusCode = when (it.status) {
+          Health.OK -> HttpStatus.OK
+          Health.DEGRADED -> HttpStatus.TOO_MANY_REQUESTS
+          Health.FAILED -> HttpStatus.SERVICE_UNAVAILABLE
+        }
+
+        ResponseEntity
+            .status(statusCode)
+            .body(it)
+      }
 
   @RequestMapping("/sys/traffic")
   fun traffic() =
