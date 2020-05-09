@@ -18,6 +18,7 @@ package tv.dotstart.badge.service.github
 
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
+import tv.dotstart.badge.service.github.model.Repository
 import tv.dotstart.badge.service.github.model.User
 
 /**
@@ -54,4 +55,12 @@ class GitHub(val clientId: String?,
       .uri("/users/{username}", username)
       .retrieve()
       .bodyToMono<User>()
+
+  /**
+   * Retrieves a given repository.
+   */
+  fun getRepository(owner: String, name: String) = this.client.get()
+      .uri("/repos/{owner}/{name}", owner, name)
+      .retrieve()
+      .bodyToMono<Repository>()
 }
