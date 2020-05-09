@@ -49,7 +49,6 @@ class ConnectorHealthCheck private constructor(private val connector: Connector)
   class Factory(private val connectors: List<Connector>) : HealthCheck.Factory {
 
     override fun create() = this.connectors
-        .filter { it.rateLimit != null }
         .map(::ConnectorHealthCheck)
   }
 }
