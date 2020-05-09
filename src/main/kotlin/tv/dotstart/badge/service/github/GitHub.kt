@@ -20,6 +20,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
 import tv.dotstart.badge.service.github.model.Repository
 import tv.dotstart.badge.service.github.model.User
+import tv.dotstart.badge.service.rate.ReactiveAtomicCounter
 
 /**
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
@@ -27,7 +28,8 @@ import tv.dotstart.badge.service.github.model.User
  */
 class GitHub(val clientId: String?,
              val clientSecret: String?,
-             baseUrl: String = "https://api.github.com") {
+             baseUrl: String = "https://api.github.com",
+             val counter: ReactiveAtomicCounter) {
 
   private val client = WebClient.builder()
       .baseUrl(baseUrl)
@@ -51,16 +53,18 @@ class GitHub(val clientId: String?,
   /**
    * Retrieves a given user profile.
    */
-  fun getUser(username: String) = this.client.get()
-      .uri("/users/{username}", username)
-      .retrieve()
-      .bodyToMono<User>()
+  fun getUser(username: String) = this.counter.increment()
+      .then(this.client.get()
+                .uri("/users/{username}", username)
+                .retrieve()
+                .bodyToMono<User>())
 
   /**
    * Retrieves a given repository.
    */
-  fun getRepository(owner: String, name: String) = this.client.get()
-      .uri("/repos/{owner}/{name}", owner, name)
-      .retrieve()
-      .bodyToMono<Repository>()
+  fun getRepository(owner: String, name: String) = this.counter.increment()
+      .then(this.client.get()
+                .uri("/repos/{owner}/{name}", owner, name)
+                .retrieve()
+                .bodyToMono<Repository>())
 }
