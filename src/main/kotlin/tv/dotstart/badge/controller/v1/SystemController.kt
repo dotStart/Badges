@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
 import tv.dotstart.badge.model.v1.SystemHealth
+import tv.dotstart.badge.model.v1.SystemTraffic
+import tv.dotstart.badge.service.github.GitHub
 
 /**
  * Provides basic system metadata such as application health and versioning.
@@ -30,13 +32,18 @@ import tv.dotstart.badge.model.v1.SystemHealth
  */
 @RestController
 @RequestMapping("/v1")
-class SystemController(private val buildProperties: BuildProperties?) {
+class SystemController(
+    private val buildProperties: BuildProperties?,
+    private val gitHub: GitHub) {
 
   // at the moment we always return OK since there is no complex health check logic available
   @RequestMapping("/sys/health")
-  fun health() =
-      Mono.just(SystemHealth(
-          SystemHealth.Status.OK,
-          this.buildProperties?.version ?: "unknown"
-      ))
+  fun health() = Mono.just(SystemHealth(
+      SystemHealth.Status.OK,
+      this.buildProperties?.version ?: "unknown"
+  ))
+
+  @RequestMapping("/sys/traffic")
+  fun traffic() = this.gitHub.getRequestCount()
+      .map(::SystemTraffic)
 }
