@@ -65,5 +65,6 @@ class RedisReactiveCounter(
   override fun get() = this.template
       .opsForValue()
       .get(this.key)
-      .map { it.toLongOrNull(10) ?: 0 }
+      .flatMap { Mono.justOrEmpty(it.toLongOrNull()) }
+      .switchIfEmpty(Mono.just(0))
 }
