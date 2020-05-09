@@ -16,12 +16,11 @@
  */
 package tv.dotstart.badge.service.discord
 
-import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
-import reactor.core.publisher.Mono
 import tv.dotstart.badge.service.Connector
 import tv.dotstart.badge.service.discord.model.Widget
+import tv.dotstart.badge.service.counter.ReactiveCounter
 
 /**
  * Provides access to aspects of the Discord API.
@@ -29,8 +28,7 @@ import tv.dotstart.badge.service.discord.model.Widget
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 09/05/2020
  */
-@Service
-class Discord : Connector {
+class Discord(private val counter: ReactiveCounter) : Connector {
 
   private val client = WebClient.builder()
       .baseUrl("https://discordapp.com/api")
@@ -41,13 +39,14 @@ class Discord : Connector {
 
   override val name = "discord"
   override val rateLimit = null
-  override fun getRateLimitUsage() = Mono.just(0L)
+  override fun getRateLimitUsage() = this.counter.get()
 
   /**
    * Retrieves the contents of the server widget (if enabled).
    */
-  fun getWidget(serverId: String) = this.client.get()
-      .uri("/guilds/{serverId}/widget.json", serverId)
-      .retrieve()
-      .bodyToMono<Widget>()
+  fun getWidget(serverId: String) = this.counter.increment()
+      .then(this.client.get()
+                .uri("/guilds/{serverId}/widget.json", serverId)
+                .retrieve()
+                .bodyToMono<Widget>())
 }
