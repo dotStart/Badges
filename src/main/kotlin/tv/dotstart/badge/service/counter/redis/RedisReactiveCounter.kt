@@ -14,10 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.badge.service.rate
+package tv.dotstart.badge.service.counter.redis
 
-import org.springframework.data.redis.core.ReactiveRedisTemplate
+import org.springframework.data.redis.core.ReactiveStringRedisTemplate
 import reactor.core.publisher.Mono
+import tv.dotstart.badge.service.counter.ReactiveCounter
+import java.time.Duration
 import java.time.Instant
 
 /**
@@ -26,31 +28,42 @@ import java.time.Instant
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 09/05/2020
  */
-class RedisReactiveAtomicCounter(
-    private val template: ReactiveRedisTemplate<String, String>,
-    private val key: () -> String,
-    private val expiration: () -> Instant?) : ReactiveAtomicCounter {
+class RedisReactiveCounter(
+    private val template: ReactiveStringRedisTemplate,
+    private val scope: String,
+    private val resetsEvery: Duration? = null) : ReactiveCounter {
+
+  private val key: String = "counter_$scope"
+
+  private val nextReset: Instant?
+    get() = this.resetsEvery?.let {
+      val time = System.currentTimeMillis()
+      val partOfPeriod = time % it.toMillis()
+
+      val nextReset = time + (it.toMillis() - partOfPeriod)
+      return Instant.ofEpochMilli(nextReset)
+    }
 
   override fun increment(): Mono<Long> {
-    val key = this.key()
-    val expiration = this.expiration()
+    val nextReset = this.nextReset
 
     val query = this.template
         .opsForValue()
-        .increment(this.key())
-    if (expiration == null) {
+        .increment(key)
+
+    if (nextReset == null) {
       return query
     }
 
     return query
         .flatMap {
-          this.template.expireAt(key, expiration)
+          this.template.expireAt(key, nextReset)
               .thenReturn(it)
         }
   }
 
   override fun get() = this.template
       .opsForValue()
-      .get(this.key())
+      .get(this.key)
       .map { it.toLongOrNull(10) ?: 0 }
 }

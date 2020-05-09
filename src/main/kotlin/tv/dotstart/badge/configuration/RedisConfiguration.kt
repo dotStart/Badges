@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate
 import tv.dotstart.badge.configuration.properties.CacheProperties
 import tv.dotstart.badge.service.cache.redis.RedisCacheProvider
+import tv.dotstart.badge.service.counter.redis.RedisReactiveCounterProvider
 import java.time.Duration
 
 /**
@@ -35,4 +36,8 @@ class RedisConfiguration(private val properties: CacheProperties) {
   @Bean
   fun redisCacheProvider(operations: ReactiveStringRedisTemplate) =
       RedisCacheProvider(operations, Duration.ofMillis(this.properties.duration))
+
+  @Bean
+  fun redisCounterProvider(operations: ReactiveStringRedisTemplate) =
+      RedisReactiveCounterProvider(operations)
 }

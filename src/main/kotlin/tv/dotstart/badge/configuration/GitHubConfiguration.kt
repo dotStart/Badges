@@ -20,15 +20,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.data.redis.core.ReactiveStringRedisTemplate
 import tv.dotstart.badge.configuration.properties.GitHubProperties
+import tv.dotstart.badge.service.counter.ReactiveCounterProvider
 import tv.dotstart.badge.service.github.GitHub
-import tv.dotstart.badge.service.rate.RedisReactiveAtomicCounter
 import tv.dotstart.badge.util.logger
-import java.time.Clock
-import java.time.Instant
-import java.time.OffsetDateTime
-import java.time.temporal.ChronoUnit
+import java.time.Duration
 
 /**
  * Configures GitHub connectivity.
@@ -42,22 +38,12 @@ import java.time.temporal.ChronoUnit
 class GitHubConfiguration(private val properties: GitHubProperties) {
 
   @Bean
-  fun gitHub(redisTemplate: ReactiveStringRedisTemplate): GitHub {
+  fun gitHub(counterProvider: ReactiveCounterProvider): GitHub {
     logger<GitHubConfiguration>()
         .info("Enabling GitHub connector with clientId ${properties.clientId}")
 
-    val counter = RedisReactiveAtomicCounter(
-        redisTemplate,
-        {
-          val time = OffsetDateTime.now(Clock.systemUTC())
-          "rate_github_${time.hour}"
-        },
-        {
-          Instant.now()
-              .truncatedTo(ChronoUnit.HOURS)
-              .plusSeconds(3600)
-        }
-    )
+    val counter = counterProvider.create("github_rate_limit",
+                                         Duration.ofHours(1))
 
     return GitHub(this.properties.clientId,
                   this.properties.clientSecret,

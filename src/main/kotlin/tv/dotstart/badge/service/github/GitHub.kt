@@ -22,7 +22,7 @@ import tv.dotstart.badge.service.Connector
 import tv.dotstart.badge.service.github.model.Release
 import tv.dotstart.badge.service.github.model.Repository
 import tv.dotstart.badge.service.github.model.User
-import tv.dotstart.badge.service.rate.ReactiveAtomicCounter
+import tv.dotstart.badge.service.counter.ReactiveCounter
 
 /**
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
@@ -31,7 +31,7 @@ import tv.dotstart.badge.service.rate.ReactiveAtomicCounter
 class GitHub(private val clientId: String?,
              private val clientSecret: String?,
              baseUrl: String = "https://api.github.com",
-             private val counter: ReactiveAtomicCounter) : Connector {
+             private val counter: ReactiveCounter) : Connector {
 
   private val client = WebClient.builder()
       .baseUrl(baseUrl)

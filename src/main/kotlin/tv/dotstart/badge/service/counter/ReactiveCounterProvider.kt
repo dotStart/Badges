@@ -14,25 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.badge.service.rate
+package tv.dotstart.badge.service.counter
 
-import reactor.core.publisher.Mono
+import java.time.Duration
 
 /**
- * Provides a reactive counter implementation.
+ * Allocates reactive persisted atomic counters for a given scope and reset duration.
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 09/05/2020
  */
-interface ReactiveAtomicCounter {
+interface ReactiveCounterProvider {
 
-  /**
-   * Increments the value within the counter and returns the respective result.
-   */
-  fun increment(): Mono<Long>
-
-  /**
-   * Retrieves the current value of the counter.
-   */
-  fun get(): Mono<Long>
+  fun create(scope: String, resetsEvery: Duration? = null): ReactiveCounter
 }
