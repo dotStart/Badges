@@ -38,7 +38,7 @@ import tv.dotstart.badge.util.badge
 @ConditionalOnGitHubConnector
 @BadgeCategory(
     "github.user",
-    ["user"],
+    ["user", "source"],
     [
       BadgeCategory.DefaultValue("username", "dotStart")
     ]
