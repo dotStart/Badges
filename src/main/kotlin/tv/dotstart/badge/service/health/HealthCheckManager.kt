@@ -49,8 +49,8 @@ class HealthCheckManager(checks: List<HealthCheck>, factories: List<HealthCheck.
               it.getState()
                   .map { state -> it.id to state }
             })
-        .buffer()
-        .blockLast()
+        .collectList()
+        .block()
         ?.toMap() ?: emptyMap()
     val health = checkStatus.values.getStatus()
 

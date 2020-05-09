@@ -68,7 +68,7 @@ class SystemController(
                 it.getRateLimitUsage()
                     .map { usage -> it to usage }
               })
-          .buffer()
+          .collectList()
           .map {
             val connectors = it
                 .map { (connector, usage) ->
