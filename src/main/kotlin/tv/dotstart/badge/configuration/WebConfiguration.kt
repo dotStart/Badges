@@ -16,10 +16,16 @@
  */
 package tv.dotstart.badge.configuration
 
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.io.Resource
 import org.springframework.http.codec.ServerCodecConfigurer
 import org.springframework.web.reactive.config.WebFluxConfigurer
+import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.router
 import tv.dotstart.badge.support.http.SVGHttpMessageEncoder
+
 
 /**
  * Customizes some minor aspects of the webflux runtime.
@@ -29,6 +35,12 @@ import tv.dotstart.badge.support.http.SVGHttpMessageEncoder
  */
 @Configuration
 class WebConfiguration : WebFluxConfigurer {
+
+  @Bean
+  fun staticRouter(
+      @Value("classpath:/static/index.html") index: Resource) = router {
+    GET("/") { _ -> ServerResponse.ok().bodyValue(index) }
+  }
 
   override fun configureHttpMessageCodecs(configurer: ServerCodecConfigurer) {
     configurer.customCodecs()
