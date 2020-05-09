@@ -28,4 +28,4 @@ import tv.dotstart.badge.util.Color
 /**
  * Defines the brand color which is used for badges when no other color variation is preferable.
  */
-val brandColor = Color.BLUE
+internal val brandColor = Color.BLUE
