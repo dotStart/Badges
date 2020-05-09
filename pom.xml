@@ -154,7 +154,7 @@
   </dependencies>
 
   <build>
-    <finalName>Badge</finalName>
+    <finalName>badges</finalName>
 
     <sourceDirectory>src/main/kotlin</sourceDirectory>
     <testSourceDirectory>src/test/kotlin</testSourceDirectory>

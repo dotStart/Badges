@@ -32,7 +32,7 @@ jobs:
         if: ${{ matrix.java == '11' }}
         with:
           name: Server
-          path: target/Badges.jar
+          path: target/badges.jar
       - name: Run sonarqube
         if: ${{ matrix.java == '11' }}
         continue-on-error: true
