@@ -63,6 +63,39 @@
             </div>
           </div>
         </div>
+
+        <div class="section">
+          <h5>Custom</h5>
+
+          <div class="row">
+            <div class="input-field col">
+              <input id="custom_title" type="text" placeholder="Title" v-model="customTitle"/>
+              <label for="custom_title">Title</label>
+            </div>
+            <div class="input-field col">
+              <input id="custom_value" type="text" placeholder="Value" v-model="customValue"/>
+              <label for="custom_value">Title</label>
+            </div>
+            <div class="input-field col">
+              <select id="custom_color" class="browser-default" v-model="customColor">
+                <option v-for="color in colors" :value="color.toLowerCase()">{{ color.toLowerCase() }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s3">
+              <img :src="customBadgeUri"/>
+            </div>
+            <div class="col s9">
+              <input type="text" readonly :value="customBadgeUri"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s2" v-for="color in colors">
+              <img :src="getCustomPreviewUri(color)"/>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 

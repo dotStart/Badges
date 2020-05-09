@@ -18,21 +18,57 @@
 
 (function () {
   $.getJSON('/v1/badge', (index) => {
+    function getBadgeUri(params, path) {
+      for (const parameterName in params) {
+        path = path.replace('{' + parameterName + '}', params[parameterName]);
+      }
+
+      return location.origin + index.context + path;
+    }
+
     const app = new Vue({
       el: '#app',
       data: {
         systemHealth: '',
 
-        badgeScopes: index.scopes
+        colors: index.colors,
+        badgeScopes: index.scopes,
+
+        customColor: 'default',
+        customTitle: 'title',
+        customValue: 'value'
       },
       methods: {
         getBadgeUri: function (scope, path) {
-          for (const parameterName of scope.parameters) {
-            path = path.replace('{' + parameterName + '}',
-                scope.parameterDefaults[parameterName]);
+          const params = {};
+
+          for (const paramName of scope.parameters) {
+            params[paramName] = scope.parameterDefaults[paramName];
           }
 
-          return location.origin + index.context + path;
+          return getBadgeUri(params, path);
+        },
+
+        getCustomPreviewUri: function(color) {
+          return getBadgeUri(
+              {
+                color: color,
+                value: color.toLowerCase()
+              },
+              '/v1/badge/custom/{color}/color/{value}'
+          )
+        }
+      },
+      computed: {
+        customBadgeUri: function () {
+          return getBadgeUri(
+              {
+                title: this.customTitle,
+                value: this.customValue,
+                color: this.customColor
+              },
+              '/v1/badge/custom/{color}/{title}/{value}'
+          )
         }
       }
     });
