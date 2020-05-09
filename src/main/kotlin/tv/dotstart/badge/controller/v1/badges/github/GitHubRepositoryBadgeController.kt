@@ -30,6 +30,9 @@ import tv.dotstart.badge.service.github.GitHub
 import tv.dotstart.badge.service.github.model.Repository
 import tv.dotstart.badge.util.Color
 import tv.dotstart.badge.util.badge
+import tv.dotstart.badge.util.toHumanReadableString
+import java.time.Duration
+import java.time.OffsetDateTime
 
 /**
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
@@ -93,4 +96,15 @@ class GitHubRepositoryBadgeController(private val gitHub: GitHub,
   fun template(@PathVariable owner: String, @PathVariable name: String) =
       this.getRepo(owner, name)
           .map { badge("template", it.isTemplate) }
+
+  @BadgeMapping("/pushed")
+  fun lastPushed(@PathVariable owner: String, @PathVariable name: String) =
+      this.getRepo(owner, name)
+          .flatMap { Mono.justOrEmpty(it.pushedAt) }
+          .map {
+            val duration = Duration.between(it, OffsetDateTime.now())
+
+            badge("last activity", "${duration.toHumanReadableString()} ago", brandColor)
+          }
+          .switchIfEmpty(Mono.just(badge("last activity", "never", Color.FALLBACK)))
 }
