@@ -42,3 +42,12 @@ jobs:
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
           -Dsonar.host.url=https://torchmind.com/sonarqube/
           -Dsonar.projectKey=badges
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        if: ${{ matrix.java == '11' }}
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: dotStart/Badges/badges
+          tag_with_ref: true
