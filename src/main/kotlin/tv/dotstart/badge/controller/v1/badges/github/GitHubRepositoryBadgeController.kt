@@ -97,13 +97,28 @@ class GitHubRepositoryBadgeController(private val gitHub: GitHub,
       this.getRepo(owner, name)
           .map { badge("template", it.isTemplate) }
 
+  @BadgeMapping("/created")
+  fun created(@PathVariable owner: String, @PathVariable name: String) =
+      this.getRepo(owner, name)
+          .map {
+            val duration = Duration.between(it.createdAt, OffsetDateTime.now())
+            badge("created", "${duration.toHumanReadableString()} ago", brandColor)
+          }
+
+  @BadgeMapping("/updated")
+  fun updated(@PathVariable owner: String, @PathVariable name: String) =
+      this.getRepo(owner, name)
+          .map {
+            val duration = Duration.between(it.updatedAt, OffsetDateTime.now())
+            badge("updated", "${duration.toHumanReadableString()} ago", brandColor)
+          }
+
   @BadgeMapping("/pushed")
   fun lastPushed(@PathVariable owner: String, @PathVariable name: String) =
       this.getRepo(owner, name)
           .flatMap { Mono.justOrEmpty(it.pushedAt) }
           .map {
             val duration = Duration.between(it, OffsetDateTime.now())
-
             badge("last activity", "${duration.toHumanReadableString()} ago", brandColor)
           }
           .switchIfEmpty(Mono.just(badge("last activity", "never", Color.FALLBACK)))
