@@ -17,6 +17,7 @@
 package tv.dotstart.badge.model.v1
 
 import tv.dotstart.badge.service.badge.BadgeScope
+import tv.dotstart.badge.util.Color
 
 /**
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
@@ -24,4 +25,7 @@ import tv.dotstart.badge.service.badge.BadgeScope
  */
 data class BadgeIndex(
     val context: String,
-    val scopes: List<BadgeScope>)
+    val scopes: List<BadgeScope>) {
+
+  val colors = Color.values()
+}
