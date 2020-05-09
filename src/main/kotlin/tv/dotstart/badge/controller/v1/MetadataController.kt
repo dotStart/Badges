@@ -16,10 +16,13 @@
  */
 package tv.dotstart.badge.controller.v1
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import reactor.core.publisher.Mono
 import tv.dotstart.badge.service.badge.BadgeIndex
+import tv.dotstart.badge.model.v1.BadgeIndex as BadgeIndexModel
 
 /**
  * Exposes basic badge metadata to the frontend.
@@ -29,8 +32,12 @@ import tv.dotstart.badge.service.badge.BadgeIndex
  */
 @RestController
 @RequestMapping("/v1/badge")
-class MetadataController(private val index: BadgeIndex) {
+class MetadataController(
+    @Value("\${server.context:}")
+    private val context: String,
+    private val index: BadgeIndex) {
 
   @GetMapping
-  fun badgeIndex() = this.index
+  fun badgeIndex() = Mono.just(this.index)
+      .map { BadgeIndexModel(this.context, it.toList()) }
 }

@@ -23,7 +23,7 @@
       data: {
         systemHealth: '',
 
-        badgeScopes: index
+        badgeScopes: index.scopes
       },
       methods: {
         getBadgeUri: function (scope, path) {
@@ -32,7 +32,7 @@
                 scope.parameterDefaults[parameterName]);
           }
 
-          return location.origin + path;
+          return location.origin + index.context + path;
         }
       }
     });
