@@ -19,6 +19,7 @@ package tv.dotstart.badge.controller.v1.badges.github
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import reactor.core.publisher.Mono
 import tv.dotstart.badge.configuration.properties.annotations.ConditionalOnGitHubConnector
 import tv.dotstart.badge.service.badge.annotation.BadgeCategory
 import tv.dotstart.badge.service.badge.annotation.BadgeMapping
@@ -56,17 +57,23 @@ class GitHubUserBadgeController(
   @BadgeMapping("/name")
   fun name(@PathVariable username: String) =
       this.getUser(username)
-          .map { badge("name", it.name, brandColor) }
+          .flatMap { Mono.justOrEmpty(it.name) }
+          .map { badge("name", it, brandColor) }
+          .switchIfEmpty(Mono.just(badge("name", "unknown", Color.FALLBACK)))
 
   @BadgeMapping("/company")
   fun company(@PathVariable username: String) =
       this.getUser(username)
-          .map { badge("company", it.company, brandColor) }
+          .flatMap { Mono.justOrEmpty(it.company) }
+          .map { badge("company", it, brandColor) }
+          .switchIfEmpty(Mono.just(badge("company", "unknown", Color.FALLBACK)))
 
   @BadgeMapping("/location")
   fun location(@PathVariable username: String) =
       this.getUser(username)
-          .map { badge("location", it.location, brandColor) }
+          .flatMap { Mono.justOrEmpty(it.location) }
+          .map { badge("location", it, brandColor) }
+          .switchIfEmpty(Mono.just(badge("location", "unknown", Color.FALLBACK)))
 
   @BadgeMapping("/hireable")
   fun hireable(@PathVariable username: String) =

@@ -58,13 +58,13 @@ data class User(
     val type: String, // TODO: Enum
     @JsonProperty("site_admin")
     val siteAdmin: Boolean,
-    val name: String,
-    val company: String,
-    val blog: String,
-    val location: String,
+    val name: String?,
+    val company: String?,
+    val blog: String?,
+    val location: String?,
     val email: String?,
     val hireable: Boolean,
-    val bio: String,
+    val bio: String?,
     @JsonProperty("public_repos")
     val publicRepos: Long,
     @JsonProperty("public_gists")
