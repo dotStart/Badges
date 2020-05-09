@@ -18,6 +18,7 @@ package tv.dotstart.badge.service.github
 
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
+import tv.dotstart.badge.service.Connector
 import tv.dotstart.badge.service.github.model.Repository
 import tv.dotstart.badge.service.github.model.User
 import tv.dotstart.badge.service.rate.ReactiveAtomicCounter
@@ -26,10 +27,10 @@ import tv.dotstart.badge.service.rate.ReactiveAtomicCounter
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 06/05/2020
  */
-class GitHub(val clientId: String?,
-             val clientSecret: String?,
+class GitHub(private val clientId: String?,
+             private val clientSecret: String?,
              baseUrl: String = "https://api.github.com",
-             val counter: ReactiveAtomicCounter) {
+             private val counter: ReactiveAtomicCounter) : Connector {
 
   private val client = WebClient.builder()
       .baseUrl(baseUrl)
@@ -42,6 +43,9 @@ class GitHub(val clientId: String?,
       }
       .build()
 
+  override val name = "github"
+  override val rateLimit = 5000L
+
   init {
     if (this.clientId == null || this.clientSecret == null) {
       require(this.clientId == null && this.clientSecret == null) {
@@ -50,10 +54,7 @@ class GitHub(val clientId: String?,
     }
   }
 
-  /**
-   * Retrieves the total amount of requests passed to GitHub.
-   */
-  fun getRequestCount() = this.counter.get()
+  override fun getRateLimitUsage() = this.counter.get()
 
   /**
    * Retrieves a given user profile.

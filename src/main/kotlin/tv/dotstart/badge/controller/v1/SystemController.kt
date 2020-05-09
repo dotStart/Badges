@@ -19,10 +19,12 @@ package tv.dotstart.badge.controller.v1
 import org.springframework.boot.info.BuildProperties
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.toMono
 import tv.dotstart.badge.model.v1.SystemHealth
 import tv.dotstart.badge.model.v1.SystemTraffic
-import tv.dotstart.badge.service.github.GitHub
+import tv.dotstart.badge.service.Connector
 
 /**
  * Provides basic system metadata such as application health and versioning.
@@ -34,7 +36,7 @@ import tv.dotstart.badge.service.github.GitHub
 @RequestMapping("/v1")
 class SystemController(
     private val buildProperties: BuildProperties?,
-    private val gitHub: GitHub) {
+    private val connectors: List<Connector>) {
 
   // at the moment we always return OK since there is no complex health check logic available
   @RequestMapping("/sys/health")
@@ -44,6 +46,21 @@ class SystemController(
   ))
 
   @RequestMapping("/sys/traffic")
-  fun traffic() = this.gitHub.getRequestCount()
-      .map(::SystemTraffic)
+  fun traffic() =
+      Flux.merge(
+          this.connectors
+              .map {
+                it.getRateLimitUsage()
+                    .map { usage -> it to usage }
+              })
+          .buffer()
+          .map {
+            val connectors = it
+                .map { (connector, usage) ->
+                  SystemTraffic.ConnectorTraffic(connector.name, connector.rateLimit, usage)
+                }
+
+            SystemTraffic(connectors)
+          }
+          .toMono()
 }

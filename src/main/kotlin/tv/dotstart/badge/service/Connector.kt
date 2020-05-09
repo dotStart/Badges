@@ -14,15 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.badge.model.v1
+package tv.dotstart.badge.service
+
+import reactor.core.publisher.Mono
 
 /**
- * Identifies the total amount of traffic passed to various connectors.
+ * Provides a base for service connectors.
  *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 09/05/2020
  */
-data class SystemTraffic(val connectors: List<ConnectorTraffic>) {
+interface Connector {
 
-  data class ConnectorTraffic(val name: String, val limit: Long?, val usage: Long)
+  /**
+   * Provides a human readable name for this connector implementation.
+   */
+  val name: String
+
+  /**
+   * Identifies the maximum amount of requests which may be sent to the API of this connector within
+   * a given time span.
+   */
+  val rateLimit: Long?
+
+  /**
+   * Retrieves the current estimated rate limit usage for this connector.
+   */
+  fun getRateLimitUsage(): Mono<Long>
 }
