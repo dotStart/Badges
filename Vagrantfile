@@ -14,6 +14,8 @@ Vagrant.configure("2") do |config|
     pacman --noconfirm -S docker redis
     echo "bind 0.0.0.0" >> /etc/redis.conf
     systemctl enable redis
+    systemctl enable docker
     systemctl restart redis
+    systemctl restart docker
   SHELL
 end
