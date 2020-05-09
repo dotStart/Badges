@@ -51,6 +51,11 @@ class GitHub(val clientId: String?,
   }
 
   /**
+   * Retrieves the total amount of requests passed to GitHub.
+   */
+  fun getRequestCount() = this.counter.get()
+
+  /**
    * Retrieves a given user profile.
    */
   fun getUser(username: String) = this.counter.increment()
