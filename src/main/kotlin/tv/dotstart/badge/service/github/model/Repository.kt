@@ -148,7 +148,7 @@ data class Repository(
     val disabled: Boolean,
     val visibility: String?, // TODO: Enum, not populated?
     @JsonProperty("pushed_at")
-    val pushedAt: OffsetDateTime,
+    val pushedAt: OffsetDateTime?,
     @JsonProperty("created_at")
     val createdAt: OffsetDateTime,
     @JsonProperty("updated_at")
