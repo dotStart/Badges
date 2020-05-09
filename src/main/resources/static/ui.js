@@ -21,6 +21,8 @@
     const app = new Vue({
       el: '#app',
       data: {
+        systemHealth: '',
+
         badgeScopes: index
       },
       methods: {
@@ -36,5 +38,10 @@
     });
 
     M.updateTextFields();
+
+    $.getJSON('/v1/sys/health').fail(function (res) {
+      const data = res.responseJSON;
+      app.systemHealth = data.status;
+    });
   });
 })();
