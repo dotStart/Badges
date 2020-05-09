@@ -26,8 +26,8 @@ import tv.dotstart.badge.controller.error.github.NoSuchUserException
 import tv.dotstart.badge.service.badge.annotation.BadgeCategory
 import tv.dotstart.badge.service.badge.annotation.BadgeMapping
 import tv.dotstart.badge.service.cache.CacheProvider
-import tv.dotstart.badge.service.github.GitHub
-import tv.dotstart.badge.service.github.model.User
+import tv.dotstart.badge.service.connector.github.GitHub
+import tv.dotstart.badge.service.connector.github.model.User
 import tv.dotstart.badge.util.Color
 import tv.dotstart.badge.util.badge
 

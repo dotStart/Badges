@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.badge.service.github
+package tv.dotstart.badge.service.connector.github
 
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
-import tv.dotstart.badge.service.Connector
-import tv.dotstart.badge.service.github.model.Release
-import tv.dotstart.badge.service.github.model.Repository
-import tv.dotstart.badge.service.github.model.User
+import tv.dotstart.badge.service.connector.Connector
+import tv.dotstart.badge.service.connector.github.model.Release
+import tv.dotstart.badge.service.connector.github.model.Repository
+import tv.dotstart.badge.service.connector.github.model.User
 import tv.dotstart.badge.service.counter.ReactiveCounter
 
 /**
@@ -31,7 +31,8 @@ import tv.dotstart.badge.service.counter.ReactiveCounter
 class GitHub(private val clientId: String?,
              private val clientSecret: String?,
              baseUrl: String = "https://api.github.com",
-             private val counter: ReactiveCounter) : Connector {
+             private val counter: ReactiveCounter) :
+    Connector {
 
   private val client = WebClient.builder()
       .baseUrl(baseUrl)

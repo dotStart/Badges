@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RestController
 import tv.dotstart.badge.service.badge.annotation.BadgeCategory
 import tv.dotstart.badge.service.badge.annotation.BadgeMapping
 import tv.dotstart.badge.service.cache.CacheProvider
-import tv.dotstart.badge.service.discord.Discord
-import tv.dotstart.badge.service.discord.model.Widget
+import tv.dotstart.badge.service.connector.discord.Discord
+import tv.dotstart.badge.service.connector.discord.model.Widget
 import tv.dotstart.badge.util.badge
 
 /**

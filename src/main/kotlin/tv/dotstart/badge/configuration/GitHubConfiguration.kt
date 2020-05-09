@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import tv.dotstart.badge.configuration.properties.GitHubProperties
 import tv.dotstart.badge.service.counter.ReactiveCounterProvider
-import tv.dotstart.badge.service.github.GitHub
+import tv.dotstart.badge.service.connector.github.GitHub
 import tv.dotstart.badge.util.logger
 import java.time.Duration
 

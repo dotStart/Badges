@@ -20,7 +20,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import tv.dotstart.badge.service.counter.ReactiveCounterProvider
-import tv.dotstart.badge.service.discord.Discord
+import tv.dotstart.badge.service.connector.discord.Discord
 import java.time.Duration
 
 /**

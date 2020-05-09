@@ -14,32 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.badge.service.github.model
+package tv.dotstart.badge.service.connector.discord.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.time.OffsetDateTime
 
 /**
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 09/05/2020
  */
-data class Asset(
-    val url: String,
-    @JsonProperty("browser_download_url")
-    val browserDownloadUrl: String,
-    val id: Long,
-    @JsonProperty("node_id")
-    val nodeId: String,
+data class Widget(
+    val id: String,
     val name: String,
-    val label: String?,
-    val state: String, // TODO: Enum
-    @JsonProperty("content_type")
-    val contentType: String,
-    val size: Long,
-    @JsonProperty("download_count")
-    val downloadCount: Long,
-    @JsonProperty("created_at")
-    val createdAt: OffsetDateTime,
-    @JsonProperty("updated_at")
-    val updatedAt: OffsetDateTime,
-    val uploader: Owner)
+    @JsonProperty("presence_count")
+    val presenceCount: Long,
+    @JsonProperty("instant_invite")
+    val instantInvite: String
+)

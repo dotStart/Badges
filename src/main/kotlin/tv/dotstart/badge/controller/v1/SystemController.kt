@@ -26,7 +26,7 @@ import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import tv.dotstart.badge.model.v1.SystemHealth
 import tv.dotstart.badge.model.v1.SystemTraffic
-import tv.dotstart.badge.service.Connector
+import tv.dotstart.badge.service.connector.Connector
 import tv.dotstart.badge.service.health.Health
 import tv.dotstart.badge.service.health.HealthCheckManager
 

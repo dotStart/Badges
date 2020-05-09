@@ -14,23 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.badge.service.discord.model
+package tv.dotstart.badge.service.connector.discord.model
 
 /**
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 09/05/2020
  */
-data class Member(
+data class Channel(
     val id: String,
-    val username: String,
-    val discriminator: String,
-    val avatar: String,
-    val status: Status,
-    val usernAme: String) {
-
-  enum class Status {
-    ONLINE,
-    IDLE,
-    DND
-  }
-}
+    val name: String,
+    val position: Long)

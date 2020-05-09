@@ -18,7 +18,7 @@ package tv.dotstart.badge.service.health.check
 
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
-import tv.dotstart.badge.service.Connector
+import tv.dotstart.badge.service.connector.Connector
 import tv.dotstart.badge.service.health.Health
 
 /**

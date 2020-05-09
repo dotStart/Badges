@@ -14,15 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.badge.service.github.model
+package tv.dotstart.badge.service.connector.github.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.OffsetDateTime
 
 /**
+ * Represents a single GitHub user within the v3 REST API.
+ *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
- * @date 08/05/2020
+ * @date 06/05/2020
  */
-data class Owner(
+data class User(
     val login: String,
     val id: Long,
     @JsonProperty("node_id")
@@ -30,8 +33,7 @@ data class Owner(
     @JsonProperty("avatar_url")
     val avatarUrl: String,
     @JsonProperty("gravatar_id")
-    val gravatarId: String?,
-    @JsonProperty("url")
+    val gravatarId: String,
     val url: String,
     @JsonProperty("html_url")
     val htmlUrl: String,
@@ -45,6 +47,8 @@ data class Owner(
     val starredUrl: String,
     @JsonProperty("subscriptions_url")
     val subscriptionsUrl: String,
+    @JsonProperty("organizations_url")
+    val organizationsUrl: String,
     @JsonProperty("repos_url")
     val reposUrl: String,
     @JsonProperty("events_url")
@@ -53,4 +57,21 @@ data class Owner(
     val receivedEventsUrl: String,
     val type: String, // TODO: Enum
     @JsonProperty("site_admin")
-    val siteAdmin: Boolean)
+    val siteAdmin: Boolean,
+    val name: String?,
+    val company: String?,
+    val blog: String?,
+    val location: String?,
+    val email: String?,
+    val hireable: Boolean,
+    val bio: String?,
+    @JsonProperty("public_repos")
+    val publicRepos: Long,
+    @JsonProperty("public_gists")
+    val publicGists: Long,
+    val followers: Long,
+    val following: Long,
+    @JsonProperty("created_at")
+    val createdAt: OffsetDateTime,
+    @JsonProperty("updated_at")
+    val updatedAt: OffsetDateTime)

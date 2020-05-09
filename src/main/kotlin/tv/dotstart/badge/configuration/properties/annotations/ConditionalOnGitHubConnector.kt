@@ -17,7 +17,7 @@
 package tv.dotstart.badge.configuration.properties.annotations
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
-import tv.dotstart.badge.service.github.GitHub
+import tv.dotstart.badge.service.connector.github.GitHub
 
 /**
  * Applies a conditional check on an annotated bean which prevents its initialization when the

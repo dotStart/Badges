@@ -14,19 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.badge.service.discord.model
+package tv.dotstart.badge.service.connector
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import reactor.core.publisher.Mono
 
 /**
+ * Provides a base for service connectors.
+ *
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 09/05/2020
  */
-data class Widget(
-    val id: String,
-    val name: String,
-    @JsonProperty("presence_count")
-    val presenceCount: Long,
-    @JsonProperty("instant_invite")
-    val instantInvite: String
-)
+interface Connector {
+
+  /**
+   * Provides a human readable name for this connector implementation.
+   */
+  val name: String
+
+  /**
+   * Identifies the maximum amount of requests which may be sent to the API of this connector within
+   * a given time span.
+   */
+  val rateLimit: Long?
+
+  /**
+   * Retrieves the current estimated rate limit usage for this connector.
+   */
+  fun getRateLimitUsage(): Mono<Long>
+}

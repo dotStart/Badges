@@ -25,8 +25,8 @@ import tv.dotstart.badge.configuration.properties.annotations.ConditionalOnGitHu
 import tv.dotstart.badge.service.badge.annotation.BadgeCategory
 import tv.dotstart.badge.service.badge.annotation.BadgeMapping
 import tv.dotstart.badge.service.cache.CacheProvider
-import tv.dotstart.badge.service.github.GitHub
-import tv.dotstart.badge.service.github.model.Release
+import tv.dotstart.badge.service.connector.github.GitHub
+import tv.dotstart.badge.service.connector.github.model.Release
 import tv.dotstart.badge.util.Color
 import tv.dotstart.badge.util.badge
 

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.badge.service.discord
+package tv.dotstart.badge.service.connector.discord
 
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
-import tv.dotstart.badge.service.Connector
-import tv.dotstart.badge.service.discord.model.Widget
+import tv.dotstart.badge.service.connector.Connector
+import tv.dotstart.badge.service.connector.discord.model.Widget
 import tv.dotstart.badge.service.counter.ReactiveCounter
 
 /**
@@ -28,7 +28,8 @@ import tv.dotstart.badge.service.counter.ReactiveCounter
  * @author [Johannes Donath](mailto:johannesd@torchmind.com)
  * @date 09/05/2020
  */
-class Discord(private val counter: ReactiveCounter) : Connector {
+class Discord(private val counter: ReactiveCounter) :
+    Connector {
 
   private val client = WebClient.builder()
       .baseUrl("https://discordapp.com/api")
