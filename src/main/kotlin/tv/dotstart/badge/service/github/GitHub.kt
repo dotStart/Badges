@@ -19,6 +19,7 @@ package tv.dotstart.badge.service.github
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
 import tv.dotstart.badge.service.Connector
+import tv.dotstart.badge.service.github.model.Release
 import tv.dotstart.badge.service.github.model.Repository
 import tv.dotstart.badge.service.github.model.User
 import tv.dotstart.badge.service.rate.ReactiveAtomicCounter
@@ -73,4 +74,13 @@ class GitHub(private val clientId: String?,
                 .uri("/repos/{owner}/{name}", owner, name)
                 .retrieve()
                 .bodyToMono<Repository>())
+
+  /**
+   * Retrieves the latest published release for a given repository.
+   */
+  fun getLatestRelease(owner: String, name: String) = this.counter.increment()
+      .then(this.client.get()
+                .uri("/repos/{owner}/{name}/releases/latest", owner, name)
+                .retrieve()
+                .bodyToMono<Release>())
 }
