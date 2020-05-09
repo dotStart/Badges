@@ -17,6 +17,7 @@
 package tv.dotstart.badge.util
 
 import com.github.nwillc.ksvg.elements.SVG
+import java.awt.Font
 import kotlin.math.roundToInt
 
 /**
@@ -29,9 +30,9 @@ import kotlin.math.roundToInt
 private const val textPadding = 8
 private const val badgeHeight = 20
 
-private const val fontFamily = "Roboto,DejaVu Sans,Verdana,Geneva,Helvetica Neue,Helvetica,sans-serif"
+private const val fontFamily = "Arial,Helvetica,sans-serif"
+private const val primaryFontFamily = "Helvetica"
 private const val fontSize = 11
-private const val fontWidth = 6.5
 
 private const val titleColor = "#555"
 private const val titleTextColor = "#fff"
@@ -41,10 +42,12 @@ private const val shadowOpacity = 0.3
 private const val shadowOffset = 1
 private const val textYOffset = 14
 
+private val primaryFont = Font(primaryFontFamily, Font.PLAIN, fontSize)
+
 fun badge(title: String, value: String, color: Color): SVG {
-  val titleWidth = ((title.length * fontWidth) + (textPadding * 2))
+  val titleWidth = (primaryFont.getTextWidth(title) + (textPadding * 2))
       .roundToInt()
-  val valueWidth = ((value.length * fontWidth) + (textPadding * 2))
+  val valueWidth = (primaryFont.getTextWidth(value) + (textPadding * 2))
       .roundToInt()
 
   return SVG.svg {
