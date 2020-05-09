@@ -19,8 +19,8 @@ package tv.dotstart.badge.configuration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import tv.dotstart.badge.service.counter.ReactiveCounterProvider
 import tv.dotstart.badge.service.connector.discord.Discord
+import tv.dotstart.badge.service.counter.ReactiveCounterProvider
 import java.time.Duration
 
 /**
@@ -32,8 +32,8 @@ import java.time.Duration
 class DiscordConfiguration {
 
   @Bean
-  fun discord(counter: ReactiveCounterProvider): Discord {
-    val counter = counter.create("discord_traffic", Duration.ofHours(1))
+  fun discord(counterProvider: ReactiveCounterProvider): Discord {
+    val counter = counterProvider.create("discord_traffic", Duration.ofHours(1))
 
     return Discord(counter)
   }
