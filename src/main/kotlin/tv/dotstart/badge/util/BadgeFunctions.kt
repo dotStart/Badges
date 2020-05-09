@@ -112,3 +112,19 @@ fun badge(title: String, value: String, color: Color): SVG {
     }
   }
 }
+
+fun badge(title: String, value: Boolean): SVG {
+  val valueStr = if (value) {
+    "yes"
+  } else {
+    "no"
+  }
+
+  val color = if (value) {
+    Color.POSITIVE
+  } else {
+    Color.NEGATIVE
+  }
+
+  return badge(title, valueStr, color)
+}

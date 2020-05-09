@@ -78,25 +78,7 @@ class GitHubUserBadgeController(
   @BadgeMapping("/hireable")
   fun hireable(@PathVariable username: String) =
       this.getUser(username)
-          .map {
-            val color = if (it.hireable) {
-              Color.POSITIVE
-            } else {
-              Color.NEGATIVE
-            }
-
-            val text = if (it.hireable) {
-              "yes"
-            } else {
-              "no"
-            }
-
-            badge(
-                "hireable",
-                text,
-                color
-            )
-          }
+          .map { badge("hireable", it.hireable) }
 
   @BadgeMapping("/repositories")
   fun publicRepos(@PathVariable username: String) =
