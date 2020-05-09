@@ -32,7 +32,7 @@
                 scope.parameterDefaults[parameterName]);
           }
 
-          return path;
+          return location.origin + path;
         }
       }
     });
