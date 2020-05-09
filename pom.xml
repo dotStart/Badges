@@ -161,15 +161,6 @@
 
     <resources>
       <resource>
-        <directory>${project.basedir}/src/main/resources</directory>
-        <targetPath>.</targetPath>
-        <filtering>true</filtering>
-
-        <includes>
-          <include>version.properties</include>
-        </includes>
-      </resource>
-      <resource>
         <directory>${project.basedir}/src/main/resources/static</directory>
         <targetPath>static</targetPath>
         <filtering>false</filtering>
