@@ -61,4 +61,14 @@ enum class Color(val value: Int, val textValue: Int = 0xFFFFFF) {
 
   val hexTextValue: String
     get() = "#%06X".format(this.textValue)
+
+  companion object {
+
+    fun byHash(input: String): Color {
+      val offset = input.toCharArray()
+          .sumBy(Char::toInt)
+
+      return Color.values()[offset % values().size]
+    }
+  }
 }
