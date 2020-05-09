@@ -30,6 +30,7 @@
       el: '#app',
       data: {
         systemHealth: '',
+        version: null,
 
         colors: index.colors,
         badgeScopes: index.scopes,
@@ -49,7 +50,7 @@
           return getBadgeUri(params, path);
         },
 
-        getCustomPreviewUri: function(color) {
+        getCustomPreviewUri: function (color) {
           return getBadgeUri(
               {
                 color: color,
@@ -75,8 +76,11 @@
 
     M.updateTextFields();
 
-    $.getJSON('/v1/sys/health').fail(function (res) {
+    $.getJSON('/v1/sys/health', (data) => {
+      app.version = data.version;
+    }).fail((res) => {
       const data = res.responseJSON;
+      app.version = data.version;
       app.systemHealth = data.status;
     });
   });
