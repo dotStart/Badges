@@ -19,6 +19,7 @@ package tv.dotstart.badge.service.connector.github
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
 import tv.dotstart.badge.service.connector.Connector
+import tv.dotstart.badge.service.connector.github.model.Organization
 import tv.dotstart.badge.service.connector.github.model.Release
 import tv.dotstart.badge.service.connector.github.model.Repository
 import tv.dotstart.badge.service.connector.github.model.User
@@ -66,6 +67,15 @@ class GitHub(private val clientId: String?,
                 .uri("/users/{username}", username)
                 .retrieve()
                 .bodyToMono<User>())
+
+  /**
+   * Retrieves a given organization profile.
+   */
+  fun getOrganization(username: String) = this.counter.increment()
+      .then(this.client.get()
+                .uri("/orgs/{username}", username)
+                .retrieve()
+                .bodyToMono<Organization>())
 
   /**
    * Retrieves a given repository.
