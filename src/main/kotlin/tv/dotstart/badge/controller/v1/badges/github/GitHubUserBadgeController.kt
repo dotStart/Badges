@@ -56,8 +56,7 @@ class GitHubUserBadgeController(
   private fun getUser(username: String) =
       this.userCache[username, this.github.getUser(username)]
           .onErrorMap(WebClientResponseException.NotFound::class.java) {
-            NoSuchUserException(
-                "No such user: $username", it)
+            NoSuchUserException("No such user: $username", it)
           }
 
   @BadgeMapping("/name")
