@@ -6,6 +6,7 @@ RUN apt-get update && \
 
 ADD pom.xml /usr/src/badges
 ADD src /usr/src/badges/
+Add .git /usr/src/badges/
 
 WORKDIR /usr/src/badges
 RUN mvn clean package
