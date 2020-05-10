@@ -168,7 +168,7 @@ data class Repository(
     val subscribersCount: Long,
     @JsonProperty("network_count")
     val networkCount: Long,
-    val license: License,
+    val license: License?,
     val organization: Owner?,
     val parent: Repository?,
     val source: Repository?)
