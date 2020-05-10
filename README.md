@@ -1,6 +1,6 @@
 ![Apache License, Version 2.0](https://badges.dotstart.tv/v1/badge/github/repo/dotStart/Badges/license)
-![Last Activity](https://badges.dotstart.tv/v1/badge/github/repo/dotStart/Badges/activity)
-![Latest Release](https://badges.dotstart.tv/v1/badge/github/repo/dotStart/Badges/release)
+![Last Activity](https://badges.dotstart.tv/v1/badge/github/repo/dotStart/Badges/pushed)
+![Latest Release](https://badges.dotstart.tv/v1/badge/github/repo/dotStart/Badges/release/latest/tag)
 
 Project/User/Organization Badges
 --------------------------------
