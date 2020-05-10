@@ -54,6 +54,7 @@ class SystemController(
   @RequestMapping("/sys/health")
   fun health() = Mono.just(SystemHealth(
       this.getVersion(),
+      this.gitProperties?.commitId,
       this.healthCheckManager.health,
       this.healthCheckManager.checkStatus))
       .map {

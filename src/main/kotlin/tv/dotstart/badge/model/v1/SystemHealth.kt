@@ -26,5 +26,6 @@ import tv.dotstart.badge.service.health.Health
  */
 data class SystemHealth(
     val version: String,
+    val gitHash: String?,
     val status: Health,
     val checks: Map<String, Health>)
