@@ -1,6 +1,6 @@
-![Apache License, Version 2.0](https://badges.dotstart.tv/github/repository/dotStart/Badges/license)
-![Last Activity](https://badges.dotstart.tv/github/repository/dotStart/Badges/activity)
-![Latest Release](https://badges.dotstart.tv/github/repository/dotStart/Badges/release)
+![Apache License, Version 2.0](https://badges.dotstart.tv/v1/github/repository/dotStart/Badges/license)
+![Last Activity](https://badges.dotstart.tv/v1/github/repository/dotStart/Badges/activity)
+![Latest Release](https://badges.dotstart.tv/v1/github/repository/dotStart/Badges/release)
 
 Project/User/Organization Badges
 --------------------------------
@@ -38,20 +38,17 @@ as well if you wish to customize the instance further:
 
 | Configuration Property                | Default Value        | Description                                                            |
 | ------------------------------------- | -------------------- | ---------------------------------------------------------------------- |
-| badge.integration.gitlab.baseUrl      | `https://gitlab.org` | Specifies the location of the target GitLab instance                   |
-| badge.integration.gitlab.tokenType    | `PRIVATE_TOKEN`      | Changes the authentication type to use for GitLab queries              |
-| badge.integration.gitlab.token        |                      | An arbitrary token with which requests to GitLab will be authenticated |
-| badge.integration.github.clientId     |                      | OAuth application identifier for GitHub query authentication           |
-| badge.integration.github.clientSecret |                      | OAuth application secret for GitHub query authentication               |
+| badge.connector.discord.enabled       | `true`               | En- or disables Discord widgets                                        |
+| badge.connector.github.enabled        | `true`               | En- or disables GitHub widgets                                         |
+| badge.connector.github.clientId       |                      | OAuth application identifier for GitHub query authentication           |
+| badge.connector.github.clientSecret   |                      | OAuth application secret for GitHub query authentication               |
+| badge.connector.gitlab.enabled        | `true`               | En- or disables GitLab widgets                                         |
+| badge.connector.gitlab.baseUrl        | `https://gitlab.org` | Specifies the location of the target GitLab instance                   |
+| badge.legacy.enabled                  | `true`               | En- or disables legacy endpoints                                       |
 
 If you wish to display your badges in any larger capacity, it is recommended to at least set up a
 GitHub clientId and secret to ensure that the application does not accidentally exceed the anonymous
 rate limit.
-
-Additionally, please note that the specified GitLab token may make some of your internal projects
-accessible (assuming that the owning user has access to them). This may or may not be desired
-behavior (GitLab does not seem to differentiate between authenticated and anonymous queries and thus
-you may simply omit the token in most cases).
 
 Browser Compatibility
 ---------------------
