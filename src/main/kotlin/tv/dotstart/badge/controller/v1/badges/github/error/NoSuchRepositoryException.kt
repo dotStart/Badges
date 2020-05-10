@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tv.dotstart.badge.controller.error.github
+package tv.dotstart.badge.controller.v1.badges.github.error
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus

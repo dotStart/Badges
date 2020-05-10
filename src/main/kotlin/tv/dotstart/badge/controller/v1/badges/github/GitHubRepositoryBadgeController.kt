@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import reactor.core.publisher.Mono
 import tv.dotstart.badge.configuration.properties.annotations.ConditionalOnGitHubConnector
-import tv.dotstart.badge.controller.error.github.NoSuchRepositoryException
+import tv.dotstart.badge.controller.v1.badges.github.error.NoSuchRepositoryException
 import tv.dotstart.badge.service.badge.annotation.BadgeCategory
 import tv.dotstart.badge.service.badge.annotation.BadgeMapping
 import tv.dotstart.badge.service.cache.CacheProvider
@@ -55,7 +55,8 @@ class GitHubRepositoryBadgeController(private val gitHub: GitHub,
   fun getRepo(owner: String, name: String) =
       this.repoCache["${owner}_$name", this.gitHub.getRepository(owner, name)]
           .onErrorMap(WebClientResponseException.NotFound::class.java) {
-            NoSuchRepositoryException("No such repository: $owner/$name", it)
+            NoSuchRepositoryException(
+                "No such repository: $owner/$name", it)
           }
 
   @BadgeMapping("/fork")

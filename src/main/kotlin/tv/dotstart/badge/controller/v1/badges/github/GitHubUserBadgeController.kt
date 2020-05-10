@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import reactor.core.publisher.Mono
 import tv.dotstart.badge.configuration.properties.annotations.ConditionalOnGitHubConnector
-import tv.dotstart.badge.controller.error.github.NoSuchUserException
+import tv.dotstart.badge.controller.v1.badges.github.error.NoSuchUserException
 import tv.dotstart.badge.service.badge.annotation.BadgeCategory
 import tv.dotstart.badge.service.badge.annotation.BadgeMapping
 import tv.dotstart.badge.service.cache.CacheProvider
@@ -56,7 +56,8 @@ class GitHubUserBadgeController(
   private fun getUser(username: String) =
       this.userCache[username, this.github.getUser(username)]
           .onErrorMap(WebClientResponseException.NotFound::class.java) {
-            NoSuchUserException("No such user: $username", it)
+            NoSuchUserException(
+                "No such user: $username", it)
           }
 
   @BadgeMapping("/name")
