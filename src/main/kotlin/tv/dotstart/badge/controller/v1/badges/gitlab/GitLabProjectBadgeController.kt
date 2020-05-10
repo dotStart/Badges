@@ -19,7 +19,9 @@ package tv.dotstart.badge.controller.v1.badges.gitlab
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.reactive.function.client.WebClientResponseException
 import tv.dotstart.badge.configuration.properties.annotations.ConditionalOnGitHubConnector
+import tv.dotstart.badge.controller.v1.badges.gitlab.error.NoSuchProjectException
 import tv.dotstart.badge.service.badge.annotation.BadgeCategory
 import tv.dotstart.badge.service.badge.annotation.BadgeMapping
 import tv.dotstart.badge.service.cache.CacheProvider
@@ -50,6 +52,9 @@ class GitLabProjectBadgeController(
 
   fun getProject(projectId: String) =
       this.cache[projectId, this.gitLab.getProject(projectId)]
+          .onErrorMap(WebClientResponseException.NotFound::class.java) {
+            NoSuchProjectException("No such project: $projectId", it)
+          }
 
   @BadgeMapping("/issues")
   fun openIssues(@PathVariable projectId: String) = this.getProject(projectId)
