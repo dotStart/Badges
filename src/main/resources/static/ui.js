@@ -40,6 +40,18 @@
         customValue: 'value'
       },
       methods: {
+        copyBadgeUri: function (path) {
+          const element = document.getElementById(path);
+          if (!element) {
+            console.warn('Missing input for badge path: ' + path);
+            return;
+          }
+
+          element.focus();
+          element.select();
+          document.execCommand('copy');
+        },
+
         getBadgeUri: function (scope, path) {
           const params = {};
 
