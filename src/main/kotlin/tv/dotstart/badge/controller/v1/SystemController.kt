@@ -17,6 +17,7 @@
 package tv.dotstart.badge.controller.v1
 
 import org.springframework.boot.info.BuildProperties
+import org.springframework.boot.info.GitProperties
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestMapping
@@ -40,12 +41,19 @@ import tv.dotstart.badge.service.health.HealthCheckManager
 @RequestMapping("/v1")
 class SystemController(
     private val buildProperties: BuildProperties?,
+    private val gitProperties: GitProperties?,
     private val healthCheckManager: HealthCheckManager,
     private val connectors: List<Connector>) {
 
+  fun getVersion() = buildString {
+    append(buildProperties?.version ?: "unknown")
+    append("+")
+    append(gitProperties?.shortCommitId?.let { "git-$it" } ?: "dev")
+  }
+
   @RequestMapping("/sys/health")
   fun health() = Mono.just(SystemHealth(
-      this.buildProperties?.version ?: "unknown",
+      this.getVersion(),
       this.healthCheckManager.health,
       this.healthCheckManager.checkStatus))
       .map {
