@@ -86,7 +86,7 @@ class GitHubRepositoryBadgeController(private val gitHub: GitHub,
           .map { badge("watchers", it.watchersCount.toString(), brandColor) }
 
   @BadgeMapping("/issues")
-  fun issues(@PathVariable owner: String, @PathVariable name: String) =
+  fun openIssuesCount(@PathVariable owner: String, @PathVariable name: String) =
       this.getRepo(owner, name)
           .map { badge("issues", it.openIssuesCount.toString(), brandColor) }
 
