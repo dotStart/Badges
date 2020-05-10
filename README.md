@@ -50,13 +50,6 @@ If you wish to display your badges in any larger capacity, it is recommended to 
 GitHub clientId and secret to ensure that the application does not accidentally exceed the anonymous
 rate limit.
 
-Browser Compatibility
----------------------
-
-Please note that the application makes use of the SVG format which may not be available within
-`<img>` tags in older browser versions. It does not currently support server-side rendering and is
-thus not suited for cases where broad compatibility with outdated browsers is required.
-
 License
 -------
 
