@@ -19,7 +19,9 @@ package tv.dotstart.badge.controller.v1.badges.discord
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.reactive.function.client.WebClientResponseException
 import tv.dotstart.badge.configuration.properties.annotations.ConditionalOnDiscordConnector
+import tv.dotstart.badge.controller.v1.badges.discord.error.NoSuchServerException
 import tv.dotstart.badge.service.badge.annotation.BadgeCategory
 import tv.dotstart.badge.service.badge.annotation.BadgeMapping
 import tv.dotstart.badge.service.cache.CacheProvider
@@ -49,6 +51,9 @@ class DiscordWidgetBadgeController(
 
   fun getWidget(serverId: String) =
       this.cache[serverId, this.discord.getWidget(serverId)]
+          .onErrorMap(WebClientResponseException.NotFound::class.java) {
+            NoSuchServerException("No such server or widget: $serverId", it)
+          }
 
   @BadgeMapping("/name")
   fun name(@PathVariable serverId: String) = this.getWidget(serverId)
