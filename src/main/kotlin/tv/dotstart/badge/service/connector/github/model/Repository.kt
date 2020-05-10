@@ -119,7 +119,7 @@ data class Repository(
     val hooksUrl: String,
     @JsonProperty("svn_url")
     val svnUrl: String,
-    val homepage: String,
+    val homepage: String?,
     val language: String?,
     @JsonProperty("forks_count")
     val forksCount: Long,
