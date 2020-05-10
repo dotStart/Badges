@@ -19,8 +19,10 @@ package tv.dotstart.badge.controller.v1.badges.github
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.reactive.function.client.WebClientResponseException
 import reactor.core.publisher.Mono
 import tv.dotstart.badge.configuration.properties.annotations.ConditionalOnGitHubConnector
+import tv.dotstart.badge.controller.v1.badges.github.error.NoSuchOrganizationException
 import tv.dotstart.badge.service.badge.annotation.BadgeCategory
 import tv.dotstart.badge.service.badge.annotation.BadgeMapping
 import tv.dotstart.badge.service.cache.CacheProvider
@@ -52,6 +54,9 @@ class GitHubOrganizationBadgeController(
 
   fun getOrganization(username: String) =
       this.cache[username, this.gitHub.getOrganization(username)]
+          .onErrorMap(WebClientResponseException.NotFound::class.java) {
+            NoSuchOrganizationException("No such repository: $username", it)
+          }
 
   @BadgeMapping("/location")
   fun location(@PathVariable username: String) = this.getOrganization(username)
