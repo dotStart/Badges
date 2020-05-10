@@ -167,7 +167,10 @@
 
         <includes>
           <include>*.html</include>
+          <include>*.ico</include>
           <include>*.js</include>
+          <include>*.png</include>
+          <include>*.svg</include>
         </includes>
       </resource>
     </resources>
