@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import reactor.core.publisher.Mono
 import tv.dotstart.badge.configuration.properties.annotations.ConditionalOnGitHubConnector
+import tv.dotstart.badge.controller.v1.badges.github.error.NoSuchReleaseException
 import tv.dotstart.badge.service.badge.annotation.BadgeCategory
 import tv.dotstart.badge.service.badge.annotation.BadgeMapping
 import tv.dotstart.badge.service.cache.CacheProvider
@@ -53,6 +54,9 @@ class GitHubReleaseBadgeController(
 
   fun getLatest(owner: String, name: String) =
       this.cache["${owner}_$name", this.gitHub.getLatestRelease(owner, name)]
+          .onErrorMap(WebClientResponseException.NotFound::class.java) {
+            NoSuchReleaseException("No latest release: $owner/$name", it)
+          }
 
   @BadgeMapping("/latest/name")
   fun latestName(@PathVariable owner: String, @PathVariable name: String) =
