@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import reactor.core.publisher.Mono
 import tv.dotstart.badge.configuration.properties.annotations.ConditionalOnGitHubConnector
-import tv.dotstart.badge.controller.v1.badges.github.error.NoSuchReleaseException
 import tv.dotstart.badge.service.badge.annotation.BadgeCategory
 import tv.dotstart.badge.service.badge.annotation.BadgeMapping
 import tv.dotstart.badge.service.cache.CacheProvider
@@ -54,9 +53,7 @@ class GitHubReleaseBadgeController(
 
   fun getLatest(owner: String, name: String) =
       this.cache["${owner}_$name", this.gitHub.getLatestRelease(owner, name)]
-          .onErrorMap(WebClientResponseException.NotFound::class.java) {
-            NoSuchReleaseException("No latest release: $owner/$name", it)
-          }
+          .onErrorResume(WebClientResponseException.NotFound::class.java) { Mono.empty() }
 
   @BadgeMapping("/latest/name")
   fun latestName(@PathVariable owner: String, @PathVariable name: String) =
@@ -66,16 +63,12 @@ class GitHubReleaseBadgeController(
                 .switchIfEmpty(Mono.just(it.tagName))
           }
           .map { badge("latest release", it, brandColor) }
-          .onErrorResume(WebClientResponseException.NotFound::class.java) {
-            Mono.just(badge("latest release", "unknown", Color.FALLBACK))
-          }
+          .switchIfEmpty(Mono.just(badge("latest release", "unknown", Color.FALLBACK)))
 
   @BadgeMapping("/latest/tag")
   fun latestTag(@PathVariable owner: String, @PathVariable name: String) =
       this.getLatest(owner, name)
           .map(Release::tagName)
           .map { badge("latest release", it, brandColor) }
-          .onErrorResume(WebClientResponseException.NotFound::class.java) {
-            Mono.just(badge("latest release", "unknown", Color.FALLBACK))
-          }
+          .switchIfEmpty(Mono.just(badge("latest release", "unknown", Color.FALLBACK)))
 }
