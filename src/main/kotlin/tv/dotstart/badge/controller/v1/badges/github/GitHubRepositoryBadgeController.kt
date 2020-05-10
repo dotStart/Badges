@@ -115,4 +115,13 @@ class GitHubRepositoryBadgeController(private val gitHub: GitHub,
             badge("last activity", "${it.passedTimeSince} ago", brandColor)
           }
           .switchIfEmpty(Mono.just(badge("last activity", "never", Color.FALLBACK)))
+
+  @BadgeMapping("/license")
+  fun license(@PathVariable owner: String, @PathVariable name: String) =
+      this.getRepo(owner, name)
+          .flatMap { Mono.justOrEmpty(it.license) }
+          .map {
+            badge("license", it.name, Color.byHash(it.name))
+          }
+          .switchIfEmpty(Mono.just(badge("license", "none", Color.FALLBACK)))
 }
