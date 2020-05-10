@@ -20,6 +20,7 @@ import org.springframework.boot.info.BuildProperties
 import org.springframework.boot.info.GitProperties
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
@@ -51,7 +52,7 @@ class SystemController(
     append(gitProperties?.shortCommitId?.let { "git-$it" } ?: "dev")
   }
 
-  @RequestMapping("/sys/health")
+  @GetMapping("/sys/health")
   fun health() = Mono.just(SystemHealth(
       this.getVersion(),
       this.gitProperties?.commitId,
@@ -69,7 +70,7 @@ class SystemController(
             .body(it)
       }
 
-  @RequestMapping("/sys/traffic")
+  @GetMapping("/sys/traffic")
   fun traffic() =
       Flux.merge(
           this.connectors
